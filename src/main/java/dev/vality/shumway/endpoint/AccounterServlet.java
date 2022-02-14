@@ -2,6 +2,7 @@ package dev.vality.shumway.endpoint;
 
 import dev.vality.damsel.accounter.AccounterSrv;
 import dev.vality.woody.thrift.impl.http.THServiceBuilder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.GenericServlet;
@@ -19,12 +20,12 @@ import java.io.IOException;
  */
 
 @WebServlet("/accounter")
+@RequiredArgsConstructor
 public class AccounterServlet extends GenericServlet {
 
     private Servlet thriftServlet;
 
-    @Autowired
-    private AccounterSrv.Iface requestHandler;
+    private final AccounterSrv.Iface requestHandler;
 
     @Override
     public void init(ServletConfig config) throws ServletException {

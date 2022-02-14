@@ -5,23 +5,21 @@ import dev.vality.shumway.dao.AccountDao;
 import dev.vality.shumway.dao.SupportAccountDao;
 import dev.vality.shumway.performance.PostgresUtils;
 import dev.vality.shumway.utils.AccountUtils;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@Ignore
-@RunWith(SpringJUnit4ClassRunner.class)
+@Disabled
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @TestPropertySource(locations = "classpath:test.properties")
 public class PerformanceTest {
@@ -42,7 +40,7 @@ public class PerformanceTest {
     @Autowired
     AccounterSrv.Iface client;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeAllTestOnlyOnce() throws IOException {
         utils = PostgresUtils.builder()
                 .host("localhost")

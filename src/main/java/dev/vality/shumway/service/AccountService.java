@@ -10,6 +10,7 @@ import dev.vality.shumway.domain.PostingOperation;
 import dev.vality.shumway.domain.StatefulAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;

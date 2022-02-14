@@ -45,7 +45,7 @@ public class AppConfiguration {
             PostingPlanService postingPlanService,
             TransactionTemplate transactionTemplate
     ) {
-        return new AccounterHandler(accountService, postingPlanService, transactionTemplate);
+        return new AccounterHandler(transactionTemplate, accountService, postingPlanService);
     }
 
 }

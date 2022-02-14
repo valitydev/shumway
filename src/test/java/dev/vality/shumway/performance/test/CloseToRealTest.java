@@ -5,23 +5,20 @@ import dev.vality.shumway.dao.AccountDao;
 import dev.vality.shumway.dao.SupportAccountDao;
 import dev.vality.shumway.performance.PostgresUtils;
 import dev.vality.shumway.utils.AccountUtils;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@Ignore
-@RunWith(SpringJUnit4ClassRunner.class)
+@Disabled
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @TestPropertySource(locations = "classpath:test.properties")
 public class CloseToRealTest {
@@ -39,7 +36,7 @@ public class CloseToRealTest {
     @Autowired
     AccounterSrv.Iface client;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeAllTestOnlyOnce() throws IOException {
 
         utils = PostgresUtils.builder()
@@ -64,7 +61,7 @@ public class CloseToRealTest {
         final int numberOfMerchantAccs = 10000;
 
         List<Long> providerAccs = AccountUtils.createAccounts(10, supportAccountDao);
-        List<Long> rbkMoneyAccs = AccountUtils.createAccounts(10, supportAccountDao);
+        List<Long> valityAccs = AccountUtils.createAccounts(10, supportAccountDao);
         List<Long> merchantAccs = AccountUtils.createAccounts(numberOfMerchantAccs, supportAccountDao);
 
         for (int i = 0; i < 10; i++) {
@@ -72,7 +69,7 @@ public class CloseToRealTest {
 
             int numberOfRounds = 10000;
             double avgTime =
-                    AccountUtils.emulateRealTransfer(client, providerAccs, rbkMoneyAccs, merchantAccs, numberOfRounds,
+                    AccountUtils.emulateRealTransfer(client, providerAccs, valityAccs, merchantAccs, numberOfRounds,
                             NUMBER_OF_THREADS, SIZE_OF_QUEUE);
 
             System.out.println("Emulate real transfer:");

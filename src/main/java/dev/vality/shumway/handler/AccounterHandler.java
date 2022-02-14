@@ -17,9 +17,12 @@ import dev.vality.shumway.domain.StatefulAccount;
 import dev.vality.shumway.service.AccountService;
 import dev.vality.shumway.service.PostingPlanService;
 import dev.vality.woody.api.flow.error.WUnavailableResultException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -32,23 +35,13 @@ import java.util.stream.Collectors;
 /**
  * Created by vpankrashkin on 16.09.16.
  */
+@Slf4j
+@RequiredArgsConstructor
 public class AccounterHandler implements AccounterSrv.Iface {
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final TransactionTemplate transactionTemplate;
-
     private final AccountService accountService;
     private final PostingPlanService planService;
-
-    public AccounterHandler(
-            AccountService accountService,
-            PostingPlanService planService,
-            TransactionTemplate transactionTemplate
-    ) {
-        this.accountService = accountService;
-        this.planService = planService;
-        this.transactionTemplate = transactionTemplate;
-    }
 
     public static boolean isFinalOperation(PostingOperation operation) {
         return operation != PostingOperation.HOLD;

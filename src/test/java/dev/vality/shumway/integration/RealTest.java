@@ -1,25 +1,54 @@
 package dev.vality.shumway.integration;
 
-import dev.vality.shumway.ShumwayApplication;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import dev.vality.damsel.accounter.Posting;
+import dev.vality.damsel.accounter.PostingBatch;
+import dev.vality.damsel.accounter.PostingPlan;
+import dev.vality.damsel.accounter.PostingPlanChange;
+import dev.vality.shumway.config.PostgresqlSpringBootITest;
+import dev.vality.shumway.domain.PostingOperation;
+import dev.vality.shumway.handler.AccounterHandler;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.thrift.TException;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.testcontainers.shaded.com.google.common.collect.Iterables;
+import org.testcontainers.shaded.com.google.common.collect.Lists;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = ShumwayApplication.class)
-public class RealTest extends DaoTestBase {
+import java.io.IOException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-/*    @Autowired
+import static java.sql.Types.OTHER;
+
+@Slf4j
+@PostgresqlSpringBootITest
+public class RealTest {
+
+    @Autowired
     JdbcTemplate jdbcTemplate;
 
-    private List<Long> accounts;
-    private List<PostingPlanChange> holds;
-    private List<PostingPlanChange> commits;
-    private List<PostingPlanChange> rollbacks;
+    @Autowired
+    AccounterHandler accounterHandler;
 
-    @Before
-    public void readOperations() throws IOException {
-        List<Map.Entry<PostingOperation, PostingPlanChange>> ops = new ArrayList<>();
+
+    private static List<Map.Entry<PostingOperation, PostingPlanChange>> ops;
+    private static List<Long> accounts;
+    private static List<PostingPlanChange> holds;
+    private static List<PostingPlanChange> commits;
+    private static List<PostingPlanChange> rollbacks;
+
+    @BeforeAll
+    public static void readOperations() throws IOException {
+        ops = new ArrayList<>();
         Scanner scanner = new Scanner(new ClassPathResource("data/postings.csv").getFile());
         scanner.nextLine(); // header
         while (scanner.hasNextLine()) {
@@ -28,7 +57,10 @@ public class RealTest extends DaoTestBase {
             System.out.println(e);
         }
         scanner.close();
+    }
 
+    @BeforeEach
+    public void fillDatabase() {
         ops.stream()
                 .flatMap(entry -> entry.getValue().getBatch().getPostings().stream())
                 .forEach(this::createAccounts);
@@ -37,7 +69,6 @@ public class RealTest extends DaoTestBase {
                 .flatMap(entry -> entry.getValue().getBatch().getPostings().stream())
                 .flatMap(posting -> Stream.of(posting.getToId(), posting.getFromId()))
                 .collect(Collectors.toList());
-
 
         holds = ops.stream()
                 .filter(entry -> entry.getKey().equals(PostingOperation.HOLD))
@@ -77,7 +108,7 @@ public class RealTest extends DaoTestBase {
     public void test() {
         holds.stream().parallel().forEach(hold -> {
             try {
-                handler.hold(hold);
+                accounterHandler.hold(hold);
                 log.warn("hold successful: {}", hold);
             } catch (TException e) {
                 log.error("hold unsuccessful: {}", hold);
@@ -85,7 +116,7 @@ public class RealTest extends DaoTestBase {
         });
         commits.stream().parallel().forEach(commit -> {
             try {
-                handler.commitPlan(new PostingPlan(commit.getId(), List.of(commit.getBatch())));
+                accounterHandler.commitPlan(new PostingPlan(commit.getId(), List.of(commit.getBatch())));
                 log.warn("commit successful: {}", commit);
             } catch (TException e) {
                 log.error("commit unsuccessful: {}", commit);
@@ -93,7 +124,7 @@ public class RealTest extends DaoTestBase {
         });
         rollbacks.stream().parallel().forEach(rollback -> {
             try {
-                handler.rollbackPlan(new PostingPlan(rollback.getId(), List.of(rollback.getBatch())));
+                accounterHandler.rollbackPlan(new PostingPlan(rollback.getId(), List.of(rollback.getBatch())));
                 log.warn("rollback successful: {}", rollback);
             } catch (TException e) {
                 log.error("rollback unsuccessful: {}", rollback);
@@ -102,7 +133,7 @@ public class RealTest extends DaoTestBase {
         //todo getPlan or getBalanceById после каждой операции?
     }
 
-    private Map.Entry<PostingOperation, PostingPlanChange> parsePostingPlanInfo(String nextLine) {
+    private static Map.Entry<PostingOperation, PostingPlanChange> parsePostingPlanInfo(String nextLine) {
         String[] strings = nextLine.split(",");
         String id = strings[0];
         String planId = strings[1];
@@ -143,5 +174,5 @@ public class RealTest extends DaoTestBase {
                     ps.setObject(3, Instant.now(), OTHER);
                     ps.setString(4, posting.getDescription());
                 });
-    }*/
+    }
 }
