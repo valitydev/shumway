@@ -1,30 +1,13 @@
 package dev.vality.shumway.performance;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 
-@Ignore
+@Disabled
 public class PostgresUtilsInDockerTest {
-    /*    @ClassRule
-    public static DockerComposeRule docker = DockerComposeRule.builder()
-            .file("src/test/resources/docker-compose.yml")
-            .logCollector(new FileLogCollector(new File("target/pglog")))
-            .waitingForService("postgres", HealthChecks.toHaveAllPortsOpen())
-            .build();
-
-    public static String getRawContainerName(DockerComposeRule docker, String serviceName)
-            throws IOException, InterruptedException {
-        for (ContainerName containerName : docker.dockerCompose().ps()) {
-            if (serviceName.equals(containerName.semanticName())) {
-                return containerName.rawName();
-            }
-        }
-
-        return null;
-    }*/
 
     @Test
     public void testAllInOne() throws IOException, InterruptedException {
