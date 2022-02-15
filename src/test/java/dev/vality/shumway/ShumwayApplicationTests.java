@@ -21,6 +21,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.web.server.LocalServerPort;
 
 import javax.annotation.PostConstruct;
 
@@ -36,13 +37,16 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class ShumwayApplicationTests extends AbstractIntegrationTest {
+
+    @LocalServerPort
+    protected int port;
+
     private AccounterSrv.Iface client;
 
     public static AccounterSrv.Iface createClient(String url) {

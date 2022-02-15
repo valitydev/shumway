@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @ServletComponentScan
-@SpringBootApplication(scanBasePackages = "dev.vality.shumway")
+@SpringBootApplication
 public class ShumwayApplication {
 
     public static void main(String[] args) {

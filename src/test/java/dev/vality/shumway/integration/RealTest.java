@@ -6,12 +6,14 @@ import dev.vality.damsel.accounter.Posting;
 import dev.vality.damsel.accounter.PostingBatch;
 import dev.vality.damsel.accounter.PostingPlan;
 import dev.vality.damsel.accounter.PostingPlanChange;
+import dev.vality.shumway.AbstractIntegrationTest;
 import dev.vality.shumway.ShumwayApplication;
 import dev.vality.shumway.domain.PostingOperation;
 import dev.vality.shumway.handler.AccounterHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +33,7 @@ import static java.sql.Types.OTHER;
 
 @Slf4j
 @SpringBootTest(classes = ShumwayApplication.class)
-public class RealTest extends DaoTestBase {
+public class RealTest extends AbstractIntegrationTest {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -39,14 +41,15 @@ public class RealTest extends DaoTestBase {
     @Autowired
     AccounterHandler handler;
 
+    private static List<Map.Entry<PostingOperation, PostingPlanChange>> ops;
     private List<Long> accounts;
     private List<PostingPlanChange> holds;
     private List<PostingPlanChange> commits;
     private List<PostingPlanChange> rollbacks;
 
     @BeforeAll
-    public void readOperations() throws IOException {
-        List<Map.Entry<PostingOperation, PostingPlanChange>> ops = new ArrayList<>();
+    public static void readOperations() throws IOException {
+        ops = new ArrayList<>();
         Scanner scanner = new Scanner(new ClassPathResource("data/postings.csv").getFile());
         scanner.nextLine(); // header
         while (scanner.hasNextLine()) {
@@ -55,6 +58,10 @@ public class RealTest extends DaoTestBase {
             System.out.println(e);
         }
         scanner.close();
+    }
+
+    @BeforeEach
+    public void fillWithData(){
 
         ops.stream()
                 .flatMap(entry -> entry.getValue().getBatch().getPostings().stream())
@@ -129,7 +136,7 @@ public class RealTest extends DaoTestBase {
         //todo getPlan or getBalanceById после каждой операции?
     }
 
-    private Map.Entry<PostingOperation, PostingPlanChange> parsePostingPlanInfo(String nextLine) {
+    private static Map.Entry<PostingOperation, PostingPlanChange> parsePostingPlanInfo(String nextLine) {
         String[] strings = nextLine.split(",");
         String id = strings[0];
         String planId = strings[1];
