@@ -20,7 +20,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.function.Consumer;
 
-@RunWith(SpringRunner.class)
 @ContextConfiguration(initializers = DaoTestBase.Initializer.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
@@ -30,25 +29,6 @@ public abstract class DaoTestBase extends AbstractTestUtils {
             TestContainersBuilder.builderWithTestContainers(TestContainersParameters::new)
                     .addPostgresqlTestContainer()
                     .build();
-
-    @ClassRule
-    public static final FailureDetectingExternalResource resource = new FailureDetectingExternalResource() {
-
-        @Override
-        protected void starting(Description description) {
-            testContainers.startTestContainers();
-        }
-
-        @Override
-        protected void failed(Throwable e, Description description) {
-            log.warn("Test Container start failed ", e);
-        }
-
-        @Override
-        protected void finished(Description description) {
-            testContainers.stopTestContainers();
-        }
-    };
 
     private static Consumer<EnvironmentProperties> getEnvironmentPropertiesConsumer() {
         return environmentProperties -> {

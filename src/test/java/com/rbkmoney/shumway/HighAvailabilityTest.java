@@ -6,14 +6,13 @@ import com.rbkmoney.shumway.utils.AccountUtils;
 import com.rbkmoney.woody.thrift.impl.http.THSpawnClientBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,11 +20,9 @@ import java.util.List;
 
 import static com.rbkmoney.shumway.utils.AccountUtils.startCircleCheck;
 import static com.rbkmoney.shumway.utils.AccountUtils.startCircleTransfer;
-import static org.junit.Assert.assertNotNull;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@Ignore
-@RunWith(SpringJUnit4ClassRunner.class)
+@Disabled
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @TestPropertySource(locations = "classpath:test.properties")
 @Slf4j
@@ -52,7 +49,7 @@ public class HighAvailabilityTest {
 //            .build();
 
     @Test
-    @Ignore
+    @Disabled
     public void testRemote() throws URISyntaxException, TException, InterruptedException {
         THSpawnClientBuilder clientBuilder =
                 new THSpawnClientBuilder().withAddress(new URI("http://localhost:" + getPort() + "/accounter"));
@@ -71,7 +68,7 @@ public class HighAvailabilityTest {
     @SuppressWarnings("VariableDeclarationUsageDistance")
     private void testHighAvailability() throws TException, InterruptedException {
         long totalStartTime = System.currentTimeMillis();
-        assertNotNull(client);
+        Assertions.assertNotNull(client);
 
         List<Long> accs = AccountUtils.createAccounts(NUMBER_OF_ACCS, supportAccountDao);
 

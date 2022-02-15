@@ -2,23 +2,21 @@ package com.rbkmoney.shumway.integration;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.rbkmoney.damsel.shumpune.Posting;
-import com.rbkmoney.damsel.shumpune.PostingBatch;
-import com.rbkmoney.damsel.shumpune.PostingPlan;
-import com.rbkmoney.damsel.shumpune.PostingPlanChange;
+import com.rbkmoney.damsel.accounter.Posting;
+import com.rbkmoney.damsel.accounter.PostingBatch;
+import com.rbkmoney.damsel.accounter.PostingPlan;
+import com.rbkmoney.damsel.accounter.PostingPlanChange;
 import com.rbkmoney.shumway.ShumwayApplication;
 import com.rbkmoney.shumway.domain.PostingOperation;
-import com.rbkmoney.shumway.handler.ShumpuneServiceHandler;
+import com.rbkmoney.shumway.handler.AccounterHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -32,7 +30,6 @@ import java.util.stream.Stream;
 import static java.sql.Types.OTHER;
 
 @Slf4j
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = ShumwayApplication.class)
 public class RealTest extends DaoTestBase {
 
@@ -40,14 +37,14 @@ public class RealTest extends DaoTestBase {
     JdbcTemplate jdbcTemplate;
 
     @Autowired
-    ShumpuneServiceHandler handler;
+    AccounterHandler handler;
 
     private List<Long> accounts;
     private List<PostingPlanChange> holds;
     private List<PostingPlanChange> commits;
     private List<PostingPlanChange> rollbacks;
 
-    @Before
+    @BeforeAll
     public void readOperations() throws IOException {
         List<Map.Entry<PostingOperation, PostingPlanChange>> ops = new ArrayList<>();
         Scanner scanner = new Scanner(new ClassPathResource("data/postings.csv").getFile());

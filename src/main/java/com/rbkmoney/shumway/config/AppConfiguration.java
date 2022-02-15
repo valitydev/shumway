@@ -3,7 +3,6 @@ package com.rbkmoney.shumway.config;
 import com.rbkmoney.shumway.dao.AccountDao;
 import com.rbkmoney.shumway.dao.PostingPlanDao;
 import com.rbkmoney.shumway.handler.AccounterHandler;
-import com.rbkmoney.shumway.handler.ShumpuneServiceHandler;
 import com.rbkmoney.shumway.service.AccountService;
 import com.rbkmoney.shumway.service.PostingPlanService;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,10 +46,5 @@ public class AppConfiguration {
             TransactionTemplate transactionTemplate
     ) {
         return new AccounterHandler(accountService, postingPlanService, transactionTemplate);
-    }
-
-    @Bean
-    ShumpuneServiceHandler shumpuneServiceHandler(AccounterHandler accounterHandler) {
-        return new ShumpuneServiceHandler(accounterHandler);
     }
 }

@@ -17,7 +17,7 @@ import com.rbkmoney.woody.thrift.impl.http.THSpawnClientBuilder;
 import org.apache.thrift.TException;
 import org.assertj.core.util.Lists;
 import org.hamcrest.Matcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.annotation.PostConstruct;
 
@@ -48,10 +48,10 @@ import static com.rbkmoney.shumway.handler.AccounterValidator.generateMessage;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.matchesPattern;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class ShumwayApplicationTests extends AbstractIntegrationTest {
     private AccounterSrv.Iface client;
@@ -287,10 +287,10 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
         for (int i = 0; i < 6; i++) {
             final int fi = i;
             checkPlanLog(() -> client.hold(new PostingPlanChange(planId, pb.get(fi))), planLog -> {
-                assertEquals("" + fi, (long) min.get(fi),
-                        planLog.getAffectedAccounts().get(acc1).getMinAvailableAmount());
-                assertEquals("" + fi, (long) max.get(fi),
-                        planLog.getAffectedAccounts().get(acc1).getMaxAvailableAmount());
+                assertEquals((long) min.get(fi),
+                        planLog.getAffectedAccounts().get(acc1).getMinAvailableAmount(), "" + fi);
+                assertEquals((long) max.get(fi),
+                        planLog.getAffectedAccounts().get(acc1).getMaxAvailableAmount(), "" + fi);
             });
         }
 
@@ -325,20 +325,20 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
 
         checkPlanLog(() -> client.hold(postingPlanChange), planLog -> {
             assertEquals(2, planLog.getAffectedAccountsSize());
-            assertEquals("Src Max available hope on credit rollback", 0,
-                    planLog.getAffectedAccounts().get(fromAccountId).getMaxAvailableAmount());
-            assertEquals("Src Min available hope on credit commit", -posting.getAmount(),
-                    planLog.getAffectedAccounts().get(fromAccountId).getMinAvailableAmount());
-            assertEquals("Debit doesn't include hold for src own amount ", 0,
-                    planLog.getAffectedAccounts().get(fromAccountId).getOwnAmount());
-            assertEquals("Dst Max available hope on debit commit", posting.getAmount(),
-                    planLog.getAffectedAccounts().get(toAccountId).getMaxAvailableAmount());
-            assertEquals("Dst Min available hope on debit rollback", 0,
-                    planLog.getAffectedAccounts().get(toAccountId).getMinAvailableAmount());
-            assertEquals("Credit doesn't include hold for dst own amount", 0,
-                    planLog.getAffectedAccounts().get(toAccountId).getOwnAmount());
+            assertEquals(0,
+                    planLog.getAffectedAccounts().get(fromAccountId).getMaxAvailableAmount(), "Src Max available hope on credit rollback");
+            assertEquals(-posting.getAmount(),
+                    planLog.getAffectedAccounts().get(fromAccountId).getMinAvailableAmount(), "Src Min available hope on credit commit");
+            assertEquals(0,
+                    planLog.getAffectedAccounts().get(fromAccountId).getOwnAmount(), "Debit doesn't include hold for src own amount ");
+            assertEquals(posting.getAmount(),
+                    planLog.getAffectedAccounts().get(toAccountId).getMaxAvailableAmount(), "Dst Max available hope on debit commit");
+            assertEquals(0,
+                    planLog.getAffectedAccounts().get(toAccountId).getMinAvailableAmount(), "Dst Min available hope on debit rollback");
+            assertEquals(0,
+                    planLog.getAffectedAccounts().get(toAccountId).getOwnAmount(), "Credit doesn't include hold for dst own amount");
 
-            assertEquals("Duplicate request, result must be equal", planLog, client.hold(postingPlanChange));
+            assertEquals(planLog, client.hold(postingPlanChange), "Duplicate request, result must be equal");
 
         });
         Posting posting2 = new Posting(fromAccountId, toAccountId, 5, "RU", "Desc");
@@ -440,18 +440,18 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
         assertEquals(postingPlan2, client.getPlan(postingPlan2.getId()));
         PostingPlanLog planLog2 = checkPlanLog(() -> client.commitPlan(postingPlan2), planLog -> {
             assertEquals(2, planLog.getAffectedAccountsSize());
-            assertEquals("Debit sets max available amount to own amount", -posting.getAmount(),
-                    planLog.getAffectedAccounts().get(fromAccountId).getMaxAvailableAmount());
-            assertEquals("Debit sets min available amount to own amount", -posting.getAmount(),
-                    planLog.getAffectedAccounts().get(fromAccountId).getMinAvailableAmount());
-            assertEquals("Debit includes commit for src own amount ", -posting.getAmount(),
-                    planLog.getAffectedAccounts().get(fromAccountId).getOwnAmount());
-            assertEquals("Credit sets max available amount to own amount", posting.getAmount(),
-                    planLog.getAffectedAccounts().get(toAccountId).getMaxAvailableAmount());
-            assertEquals("Credit sets max available amount to own amount", posting.getAmount(),
-                    planLog.getAffectedAccounts().get(toAccountId).getMinAvailableAmount());
-            assertEquals("Credit includes commit for dst own amount", posting.getAmount(),
-                    planLog.getAffectedAccounts().get(toAccountId).getOwnAmount());
+            assertEquals(-posting.getAmount(),
+                    planLog.getAffectedAccounts().get(fromAccountId).getMaxAvailableAmount(), "Debit sets max available amount to own amount");
+            assertEquals(-posting.getAmount(),
+                    planLog.getAffectedAccounts().get(fromAccountId).getMinAvailableAmount(), "Debit sets min available amount to own amount");
+            assertEquals(-posting.getAmount(),
+                    planLog.getAffectedAccounts().get(fromAccountId).getOwnAmount(), "Debit includes commit for src own amount ");
+            assertEquals(posting.getAmount(),
+                    planLog.getAffectedAccounts().get(toAccountId).getMaxAvailableAmount(), "Credit sets max available amount to own amount");
+            assertEquals(posting.getAmount(),
+                    planLog.getAffectedAccounts().get(toAccountId).getMinAvailableAmount(), "Credit sets max available amount to own amount");
+            assertEquals(posting.getAmount(),
+                    planLog.getAffectedAccounts().get(toAccountId).getOwnAmount(), "Credit includes commit for dst own amount");
         });
 
         assertEquals(postingPlan2, client.getPlan(postingPlan2.getId()));
@@ -463,7 +463,7 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             assertThat(e.getErrors().get(0), genMatcher(POSTING_PLAN_STATE_CHANGE_ERR));
         }
 
-        assertEquals("Duplicate request, result must be equal", planLog2, client.commitPlan(postingPlan2));
+        assertEquals(planLog2, client.commitPlan(postingPlan2), "Duplicate request, result must be equal");
 
         try {
             client.rollbackPlan(postingPlan2);
@@ -472,7 +472,7 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             assertThat(e.getErrors().get(0), genMatcher(POSTING_PLAN_STATE_CHANGE_ERR));
         }
 
-        assertEquals("Duplicate request, result must be equal", planLog2, client.commitPlan(postingPlan2));
+        assertEquals(planLog2, client.commitPlan(postingPlan2), "Duplicate request, result must be equal");
     }
 
     @Test
@@ -485,8 +485,8 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
         Posting posting = new Posting(fromAccountId, toAccountId, 1, "RU", "Desc");
         PostingPlanChange postingPlanChange = new PostingPlanChange(planId, new PostingBatch(1, asList(posting)));
 
-        assertEquals("Duplicate request, result must be equal", client.hold(postingPlanChange),
-                client.hold(postingPlanChange));
+        assertEquals(client.hold(postingPlanChange),
+                client.hold(postingPlanChange), "Duplicate request, result must be equal");
 
         PostingPlan postingPlan = new PostingPlan(planId, asList(new PostingBatch(1, asList(posting))));
         assertEquals(postingPlan, client.getPlan(postingPlan.getId()));
@@ -501,7 +501,7 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             assertThat(e.getErrors().get(0), genMatcher(POSTING_PLAN_STATE_CHANGE_ERR));
         }
 
-        assertEquals("Duplicate request, result must be equal", planLog, client.rollbackPlan(postingPlan));
+        assertEquals(planLog, client.rollbackPlan(postingPlan), "Duplicate request, result must be equal");
 
         try {
             client.commitPlan(postingPlan);
@@ -510,7 +510,7 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             assertThat(e.getErrors().get(0), genMatcher(POSTING_PLAN_STATE_CHANGE_ERR));
         }
 
-        assertEquals("Duplicate request, result must be equal", planLog, client.rollbackPlan(postingPlan));
+        assertEquals(planLog, client.rollbackPlan(postingPlan), "Duplicate request, result must be equal");
     }
 
     @Test

@@ -6,13 +6,14 @@ import com.palantir.docker.compose.connection.waiting.HealthChecks;
 import com.palantir.docker.compose.logging.FileLogCollector;
 import org.junit.ClassRule;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.io.IOException;
 
-@Ignore
+@Disabled
 public class PostgresUtilsInDockerTest {
     @ClassRule
     public static DockerComposeRule docker = DockerComposeRule.builder()
