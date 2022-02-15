@@ -112,7 +112,7 @@ public class AccountUtils {
     public static double emulateRealTransfer(
             AccounterSrv.Iface client,
             List<Long> providerAccs,
-            List<Long> valityMoneyAccs,
+            List<Long> rbkMoneyAccs,
             List<Long> merchantAccs,
             int numberOfRounds,
             int numberOfThreads,
@@ -125,12 +125,12 @@ public class AccountUtils {
 
         for (int j = 0; j < numberOfRounds; j++) {
             final long provider = providerAccs.get(random.nextInt(providerAccs.size()));
-            final long valityMoney = valityMoneyAccs.get(random.nextInt(valityMoneyAccs.size()));
+            final long rbkMoney = rbkMoneyAccs.get(random.nextInt(rbkMoneyAccs.size()));
             final long merchant = merchantAccs.get(random.nextInt(merchantAccs.size()));
 
             final int transferId = j;
 
-            executorService.submit(() -> makeRealTransfer(client, provider, merchant, valityMoney, transferId));
+            executorService.submit(() -> makeRealTransfer(client, provider, merchant, rbkMoney, transferId));
         }
         log.info("All transactions submitted.");
 
@@ -162,12 +162,12 @@ public class AccountUtils {
             AccounterSrv.Iface client,
             long provider,
             long merchant,
-            long valityMoney,
+            long rbkMoney,
             int transferId
     ) {
         final String ppid = System.currentTimeMillis() + "_" + transferId;
-        Posting p1 = new Posting(provider, valityMoney, 100, "RUB", "Desc");
-        Posting p2 = new Posting(valityMoney, merchant, 95, "RUB", "Desc");
+        Posting p1 = new Posting(provider, rbkMoney, 100, "RUB", "Desc");
+        Posting p2 = new Posting(rbkMoney, merchant, 95, "RUB", "Desc");
         Posting p3 = new Posting(merchant, provider, 1, "RUB", "Desc");
         PostingPlan postingPlan = new PostingPlan(ppid, Arrays.asList(new PostingBatch(1, Arrays.asList(p1, p2, p3))));
 

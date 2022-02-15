@@ -61,7 +61,7 @@ public class CloseToRealTest {
         final int numberOfMerchantAccs = 10000;
 
         List<Long> providerAccs = AccountUtils.createAccounts(10, supportAccountDao);
-        List<Long> valityMoneyAccs = AccountUtils.createAccounts(10, supportAccountDao);
+        List<Long> rbkMoneyAccs = AccountUtils.createAccounts(10, supportAccountDao);
         List<Long> merchantAccs = AccountUtils.createAccounts(numberOfMerchantAccs, supportAccountDao);
 
         for (int i = 0; i < 10; i++) {
@@ -69,8 +69,7 @@ public class CloseToRealTest {
 
             int numberOfRounds = 10000;
             double avgTime =
-                    AccountUtils.emulateRealTransfer(
-                            client, providerAccs, valityMoneyAccs, merchantAccs, numberOfRounds,
+                    AccountUtils.emulateRealTransfer(client, providerAccs, rbkMoneyAccs, merchantAccs, numberOfRounds,
                             NUMBER_OF_THREADS, SIZE_OF_QUEUE);
 
             System.out.println("Emulate real transfer:");

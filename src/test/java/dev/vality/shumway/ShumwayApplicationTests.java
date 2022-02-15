@@ -13,7 +13,6 @@ import dev.vality.damsel.accounter.PostingPlanChange;
 import dev.vality.damsel.accounter.PostingPlanLog;
 import dev.vality.damsel.base.InvalidRequest;
 import dev.vality.geck.common.util.TypeUtil;
-import dev.vality.shumway.config.PostgresqlSpringBootITest;
 import dev.vality.shumway.handler.AccounterValidator;
 import dev.vality.woody.thrift.impl.http.THSpawnClientBuilder;
 import org.apache.thrift.TException;
@@ -22,10 +21,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
 
 import javax.annotation.PostConstruct;
 
@@ -45,13 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@PostgresqlSpringBootITest
-@SpringBootTest(webEnvironment = RANDOM_PORT)
-@ContextConfiguration(classes = ShumwayApplication.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class ShumwayApplicationTests {
+public class ShumwayApplicationTests extends AbstractIntegrationTest {
 
     @LocalServerPort
     protected int port;

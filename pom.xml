@@ -31,6 +31,7 @@
         <db.password>postgres</db.password>
         <db.schema>shm</db.schema>
         <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
+        <testcontainers.version>1.15.3</testcontainers.version>
     </properties>
 
     <dependencies>
@@ -131,9 +132,48 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>dev.vality</groupId>
-            <artifactId>testcontainers-annotations</artifactId>
-            <version>1.4.0</version>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>easyway</artifactId>
+            <version>0.8.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--
+        download artifacts from https://dl.bintray.com/palantir/releases
+        mvn deploy:deploy-file -DpomFile=docker-compose-rule-0.27.0.pom   -Dfile=docker-compose-rule-0.27.0.jar  \
+         -DrepositoryId=central   -Durl=http://java-nexus.msk1.rbkmoney.net:8081/nexus/content/repositories/thirdparty/ \
+          -Dsources=docker-compose-rule-0.27.0-sources.jar -Djavadoc=docker-compose-rule-0.27.0-javadoc.jar
+        -->
+        <dependency>
+            <groupId>com.palantir.docker.compose</groupId>
+            <artifactId>docker-compose-rule-junit4</artifactId>
+            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-library</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.testcontainers/testcontainers -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.testcontainers/junit-jupiter -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
 
