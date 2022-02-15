@@ -196,7 +196,8 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             fail();
         } catch (InvalidPostingParams e) {
             assertEquals(1, e.getWrongPostingsSize());
-            assertThat(e.getWrongPostings().get(posting), genMatcher(AccounterValidator.SOURCE_TARGET_ACC_EQUAL_ERR, AccounterValidator.AMOUNT_NEGATIVE_ERR));
+            assertThat(e.getWrongPostings().get(posting),
+                    genMatcher(AccounterValidator.SOURCE_TARGET_ACC_EQUAL_ERR, AccounterValidator.AMOUNT_NEGATIVE_ERR));
         }
 
         posting = new Posting(id - 1, id, -1, "RU", "Desc");
@@ -218,7 +219,8 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             fail();
         } catch (InvalidPostingParams e) {
             assertEquals(1, e.getWrongPostingsSize());
-            assertThat(e.getWrongPostings().get(posting), genMatcher(AccounterValidator.SRC_ACC_NOT_FOUND_ERR, AccounterValidator.DST_ACC_NOT_FOUND_ERR));
+            assertThat(e.getWrongPostings().get(posting),
+                    genMatcher(AccounterValidator.SRC_ACC_NOT_FOUND_ERR, AccounterValidator.DST_ACC_NOT_FOUND_ERR));
         }
 
         try {
@@ -256,7 +258,8 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             assertEquals(1, e.getWrongPostingsSize());
             assertThat(e.getWrongPostings().get(posting),
                     genMatcher(
-                            AccounterValidator.ACC_CURR_CODE_NOT_EQUAL_ERR, AccounterValidator.ACC_CURR_CODE_NOT_EQUAL_ERR));
+                            AccounterValidator.ACC_CURR_CODE_NOT_EQUAL_ERR,
+                            AccounterValidator.ACC_CURR_CODE_NOT_EQUAL_ERR));
         }
 
         posting = new Posting(fromAccountId, toAccountId, 1, "RU", "Desc");
@@ -325,19 +328,26 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
         checkPlanLog(() -> client.hold(postingPlanChange), planLog -> {
             assertEquals(2, planLog.getAffectedAccountsSize());
             assertEquals(0,
-                    planLog.getAffectedAccounts().get(fromAccountId).getMaxAvailableAmount(), "Src Max available hope on credit rollback");
+                    planLog.getAffectedAccounts().get(fromAccountId).getMaxAvailableAmount(),
+                    "Src Max available hope on credit rollback");
             assertEquals(-posting.getAmount(),
-                    planLog.getAffectedAccounts().get(fromAccountId).getMinAvailableAmount(), "Src Min available hope on credit commit");
+                    planLog.getAffectedAccounts().get(fromAccountId).getMinAvailableAmount(),
+                    "Src Min available hope on credit commit");
             assertEquals(0,
-                    planLog.getAffectedAccounts().get(fromAccountId).getOwnAmount(), "Debit doesn't include hold for src own amount ");
+                    planLog.getAffectedAccounts().get(fromAccountId).getOwnAmount(),
+                    "Debit doesn't include hold for src own amount ");
             assertEquals(posting.getAmount(),
-                    planLog.getAffectedAccounts().get(toAccountId).getMaxAvailableAmount(), "Dst Max available hope on debit commit");
+                    planLog.getAffectedAccounts().get(toAccountId).getMaxAvailableAmount(),
+                    "Dst Max available hope on debit commit");
             assertEquals(0,
-                    planLog.getAffectedAccounts().get(toAccountId).getMinAvailableAmount(), "Dst Min available hope on debit rollback");
+                    planLog.getAffectedAccounts().get(toAccountId).getMinAvailableAmount(),
+                    "Dst Min available hope on debit rollback");
             assertEquals(0,
-                    planLog.getAffectedAccounts().get(toAccountId).getOwnAmount(), "Credit doesn't include hold for dst own amount");
+                    planLog.getAffectedAccounts().get(toAccountId).getOwnAmount(),
+                    "Credit doesn't include hold for dst own amount");
 
-            assertEquals(planLog, client.hold(postingPlanChange), "Duplicate request, result must be equal");
+            assertEquals(planLog, client.hold(postingPlanChange),
+                    "Duplicate request, result must be equal");
 
         });
         Posting posting2 = new Posting(fromAccountId, toAccountId, 5, "RU", "Desc");
@@ -351,7 +361,8 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             assertEquals(2, ex.getWrongPostingsSize());
             assertThat(ex.getWrongPostings().get(posting),
                     genMatcher(
-                            AccounterValidator.SAVED_POSTING_NOT_FOUND_ERR, AccounterValidator.RECEIVED_POSTING_NOT_FOUND_ERR));
+                            AccounterValidator.SAVED_POSTING_NOT_FOUND_ERR,
+                            AccounterValidator.RECEIVED_POSTING_NOT_FOUND_ERR));
             MatcherAssert.assertThat(ex.getWrongPostings().get(posting2), genMatcher(
                     AccounterValidator.RECEIVED_POSTING_NOT_FOUND_ERR));
         }
@@ -362,7 +373,8 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             assertEquals(2, ex.getWrongPostingsSize());
             assertThat(ex.getWrongPostings().get(posting),
                     genMatcher(
-                            AccounterValidator.SAVED_POSTING_NOT_FOUND_ERR, AccounterValidator.RECEIVED_POSTING_NOT_FOUND_ERR));
+                            AccounterValidator.SAVED_POSTING_NOT_FOUND_ERR,
+                            AccounterValidator.RECEIVED_POSTING_NOT_FOUND_ERR));
             MatcherAssert.assertThat(ex.getWrongPostings().get(posting2), genMatcher(
                     AccounterValidator.RECEIVED_POSTING_NOT_FOUND_ERR));
         }
@@ -452,17 +464,23 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
         PostingPlanLog planLog2 = checkPlanLog(() -> client.commitPlan(postingPlan2), planLog -> {
             assertEquals(2, planLog.getAffectedAccountsSize());
             assertEquals(-posting.getAmount(),
-                    planLog.getAffectedAccounts().get(fromAccountId).getMaxAvailableAmount(), "Debit sets max available amount to own amount");
+                    planLog.getAffectedAccounts().get(fromAccountId).getMaxAvailableAmount(),
+                    "Debit sets max available amount to own amount");
             assertEquals(-posting.getAmount(),
-                    planLog.getAffectedAccounts().get(fromAccountId).getMinAvailableAmount(), "Debit sets min available amount to own amount");
+                    planLog.getAffectedAccounts().get(fromAccountId).getMinAvailableAmount(),
+                    "Debit sets min available amount to own amount");
             assertEquals(-posting.getAmount(),
-                    planLog.getAffectedAccounts().get(fromAccountId).getOwnAmount(), "Debit includes commit for src own amount ");
+                    planLog.getAffectedAccounts().get(fromAccountId).getOwnAmount(),
+                    "Debit includes commit for src own amount ");
             assertEquals(posting.getAmount(),
-                    planLog.getAffectedAccounts().get(toAccountId).getMaxAvailableAmount(), "Credit sets max available amount to own amount");
+                    planLog.getAffectedAccounts().get(toAccountId).getMaxAvailableAmount(),
+                    "Credit sets max available amount to own amount");
             assertEquals(posting.getAmount(),
-                    planLog.getAffectedAccounts().get(toAccountId).getMinAvailableAmount(), "Credit sets max available amount to own amount");
+                    planLog.getAffectedAccounts().get(toAccountId).getMinAvailableAmount(),
+                    "Credit sets max available amount to own amount");
             assertEquals(posting.getAmount(),
-                    planLog.getAffectedAccounts().get(toAccountId).getOwnAmount(), "Credit includes commit for dst own amount");
+                    planLog.getAffectedAccounts().get(toAccountId).getOwnAmount(),
+                    "Credit includes commit for dst own amount");
         });
 
         assertEquals(postingPlan2, client.getPlan(postingPlan2.getId()));
@@ -471,7 +489,8 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             client.hold(postingPlanChange);
             fail();
         } catch (InvalidRequest e) {
-            MatcherAssert.assertThat(e.getErrors().get(0), genMatcher(AccounterValidator.POSTING_PLAN_STATE_CHANGE_ERR));
+            MatcherAssert.assertThat(e.getErrors().get(0),
+                    genMatcher(AccounterValidator.POSTING_PLAN_STATE_CHANGE_ERR));
         }
 
         assertEquals(planLog2, client.commitPlan(postingPlan2), "Duplicate request, result must be equal");
@@ -480,7 +499,8 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             client.rollbackPlan(postingPlan2);
             fail();
         } catch (InvalidRequest e) {
-            MatcherAssert.assertThat(e.getErrors().get(0), genMatcher(AccounterValidator.POSTING_PLAN_STATE_CHANGE_ERR));
+            MatcherAssert.assertThat(e.getErrors().get(0),
+                    genMatcher(AccounterValidator.POSTING_PLAN_STATE_CHANGE_ERR));
         }
 
         assertEquals(planLog2, client.commitPlan(postingPlan2), "Duplicate request, result must be equal");
@@ -509,7 +529,8 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             client.hold(postingPlanChange);
             fail();
         } catch (InvalidRequest e) {
-            MatcherAssert.assertThat(e.getErrors().get(0), genMatcher(AccounterValidator.POSTING_PLAN_STATE_CHANGE_ERR));
+            MatcherAssert.assertThat(e.getErrors().get(0),
+                    genMatcher(AccounterValidator.POSTING_PLAN_STATE_CHANGE_ERR));
         }
 
         assertEquals(planLog, client.rollbackPlan(postingPlan), "Duplicate request, result must be equal");
@@ -518,7 +539,8 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
             client.commitPlan(postingPlan);
             fail();
         } catch (InvalidRequest e) {
-            MatcherAssert.assertThat(e.getErrors().get(0), genMatcher(AccounterValidator.POSTING_PLAN_STATE_CHANGE_ERR));
+            MatcherAssert.assertThat(e.getErrors().get(0),
+                    genMatcher(AccounterValidator.POSTING_PLAN_STATE_CHANGE_ERR));
         }
 
         assertEquals(planLog, client.rollbackPlan(postingPlan), "Duplicate request, result must be equal");

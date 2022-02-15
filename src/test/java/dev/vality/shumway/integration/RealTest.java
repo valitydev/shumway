@@ -61,7 +61,7 @@ public class RealTest extends AbstractIntegrationTest {
     }
 
     @BeforeEach
-    public void fillWithData(){
+    public void fillWithData() {
 
         ops.stream()
                 .flatMap(entry -> entry.getValue().getBatch().getPostings().stream())
