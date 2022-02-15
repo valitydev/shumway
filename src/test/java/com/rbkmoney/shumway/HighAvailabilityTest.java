@@ -1,9 +1,9 @@
 package com.rbkmoney.shumway;
 
-import com.rbkmoney.damsel.accounter.AccounterSrv;
+import dev.vality.damsel.accounter.AccounterSrv;
 import com.rbkmoney.shumway.dao.SupportAccountDao;
 import com.rbkmoney.shumway.utils.AccountUtils;
-import com.rbkmoney.woody.thrift.impl.http.THSpawnClientBuilder;
+import dev.vality.woody.thrift.impl.http.THSpawnClientBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.junit.jupiter.api.Assertions;

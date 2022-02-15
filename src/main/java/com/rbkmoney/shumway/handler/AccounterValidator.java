@@ -1,10 +1,10 @@
 package com.rbkmoney.shumway.handler;
 
-import com.rbkmoney.damsel.accounter.InvalidPostingParams;
-import com.rbkmoney.damsel.accounter.Posting;
-import com.rbkmoney.damsel.accounter.PostingBatch;
-import com.rbkmoney.damsel.accounter.PostingPlan;
-import com.rbkmoney.damsel.base.InvalidRequest;
+import dev.vality.damsel.accounter.InvalidPostingParams;
+import dev.vality.damsel.accounter.Posting;
+import dev.vality.damsel.accounter.PostingBatch;
+import dev.vality.damsel.accounter.PostingPlan;
+import dev.vality.damsel.base.InvalidRequest;
 import com.rbkmoney.shumway.domain.PostingLog;
 import com.rbkmoney.shumway.domain.PostingOperation;
 import com.rbkmoney.shumway.domain.StatefulAccount;

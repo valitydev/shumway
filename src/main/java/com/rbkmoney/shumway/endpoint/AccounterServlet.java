@@ -1,7 +1,7 @@
 package com.rbkmoney.shumway.endpoint;
 
-import com.rbkmoney.damsel.accounter.AccounterSrv;
-import com.rbkmoney.woody.thrift.impl.http.THServiceBuilder;
+import dev.vality.damsel.accounter.AccounterSrv;
+import dev.vality.woody.thrift.impl.http.THServiceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.GenericServlet;

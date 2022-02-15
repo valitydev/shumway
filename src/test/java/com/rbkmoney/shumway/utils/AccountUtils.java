@@ -1,11 +1,11 @@
 package com.rbkmoney.shumway.utils;
 
-import com.rbkmoney.damsel.accounter.AccountPrototype;
-import com.rbkmoney.damsel.accounter.AccounterSrv;
-import com.rbkmoney.damsel.accounter.Posting;
-import com.rbkmoney.damsel.accounter.PostingBatch;
-import com.rbkmoney.damsel.accounter.PostingPlan;
-import com.rbkmoney.damsel.accounter.PostingPlanChange;
+import dev.vality.damsel.accounter.AccountPrototype;
+import dev.vality.damsel.accounter.AccounterSrv;
+import dev.vality.damsel.accounter.Posting;
+import dev.vality.damsel.accounter.PostingBatch;
+import dev.vality.damsel.accounter.PostingPlan;
+import dev.vality.damsel.accounter.PostingPlanChange;
 import com.rbkmoney.shumway.dao.AccountDao;
 import com.rbkmoney.shumway.dao.SupportAccountDao;
 import com.rbkmoney.shumway.domain.Account;
@@ -44,7 +44,7 @@ public class AccountUtils {
     public static void startCircleCheck(AccounterSrv.Iface client, List<Long> accs, long expectedAmount) {
         long startTime = System.currentTimeMillis();
         for (long accId : accs) {
-            com.rbkmoney.damsel.accounter.Account acc = retry(() -> client.getAccountByID(accId));
+            dev.vality.damsel.accounter.Account acc = retry(() -> client.getAccountByID(accId));
             assertEquals("Acc ID: " + acc.getId(), expectedAmount, acc.getOwnAmount());
             assertEquals("Acc ID: " + acc.getId(), expectedAmount, acc.getMaxAvailableAmount());
             assertEquals("Acc ID: " + acc.getId(), expectedAmount, acc.getMinAvailableAmount());

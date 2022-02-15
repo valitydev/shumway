@@ -1,10 +1,10 @@
 package com.rbkmoney.shumway.handler;
 
-import com.rbkmoney.damsel.accounter.AccountPrototype;
-import com.rbkmoney.damsel.accounter.Posting;
-import com.rbkmoney.damsel.accounter.PostingBatch;
-import com.rbkmoney.damsel.accounter.PostingPlan;
-import com.rbkmoney.geck.common.util.TypeUtil;
+import dev.vality.damsel.accounter.AccountPrototype;
+import dev.vality.damsel.accounter.Posting;
+import dev.vality.damsel.accounter.PostingBatch;
+import dev.vality.damsel.accounter.PostingPlan;
+import dev.vality.geck.common.util.TypeUtil;
 import com.rbkmoney.shumway.domain.Account;
 import com.rbkmoney.shumway.domain.AccountState;
 import com.rbkmoney.shumway.domain.PostingLog;
@@ -32,9 +32,9 @@ public class ProtocolConverter {
         );
     }
 
-    public static com.rbkmoney.damsel.accounter.Account convertFromDomainAccount(StatefulAccount domainAccount) {
+    public static dev.vality.damsel.accounter.Account convertFromDomainAccount(StatefulAccount domainAccount) {
         AccountState accountState = domainAccount.getAccountState();
-        com.rbkmoney.damsel.accounter.Account protocolAccount = new com.rbkmoney.damsel.accounter.Account(
+        dev.vality.damsel.accounter.Account protocolAccount = new dev.vality.damsel.accounter.Account(
                 domainAccount.getId(),
                 accountState.getOwnAmount(),
                 accountState.getMaxAvailableAmount(),

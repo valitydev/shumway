@@ -1,6 +1,6 @@
 package com.rbkmoney.shumway.service;
 
-import com.rbkmoney.damsel.accounter.PostingBatch;
+import dev.vality.damsel.accounter.PostingBatch;
 import com.rbkmoney.shumway.dao.AccountDao;
 import com.rbkmoney.shumway.domain.Account;
 import com.rbkmoney.shumway.domain.AccountLog;

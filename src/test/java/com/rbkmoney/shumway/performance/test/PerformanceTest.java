@@ -1,6 +1,6 @@
 package com.rbkmoney.shumway.performance.test;
 
-import com.rbkmoney.damsel.accounter.AccounterSrv;
+import dev.vality.damsel.accounter.AccounterSrv;
 import com.rbkmoney.shumway.dao.AccountDao;
 import com.rbkmoney.shumway.dao.SupportAccountDao;
 import com.rbkmoney.shumway.performance.PostgresUtils;

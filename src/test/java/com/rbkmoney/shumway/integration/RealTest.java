@@ -2,10 +2,10 @@ package com.rbkmoney.shumway.integration;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.rbkmoney.damsel.accounter.Posting;
-import com.rbkmoney.damsel.accounter.PostingBatch;
-import com.rbkmoney.damsel.accounter.PostingPlan;
-import com.rbkmoney.damsel.accounter.PostingPlanChange;
+import dev.vality.damsel.accounter.Posting;
+import dev.vality.damsel.accounter.PostingBatch;
+import dev.vality.damsel.accounter.PostingPlan;
+import dev.vality.damsel.accounter.PostingPlanChange;
 import com.rbkmoney.shumway.ShumwayApplication;
 import com.rbkmoney.shumway.domain.PostingOperation;
 import com.rbkmoney.shumway.handler.AccounterHandler;
