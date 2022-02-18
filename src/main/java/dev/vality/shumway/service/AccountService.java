@@ -1,6 +1,7 @@
 package dev.vality.shumway.service;
 
 import dev.vality.damsel.accounter.PostingBatch;
+import dev.vality.geck.common.util.TypeUtil;
 import dev.vality.shumway.dao.AccountDao;
 import dev.vality.shumway.domain.Account;
 import dev.vality.shumway.domain.AccountLog;
@@ -47,7 +48,7 @@ public class AccountService {
 
     public StatefulAccount getStatefulAccount(long id) {
         log.debug("Get stateful account: {}", id);
-        Map<Long, StatefulAccount> result = accountDao.getStateful(Arrays.asList(id));
+        Map<Long, StatefulAccount> result = accountDao.getStateful(List.of(id));
         log.debug("Got accounts: {}:{}", result.size(), result.values());
         return result.get(id);
     }
@@ -65,7 +66,7 @@ public class AccountService {
         Map<Long, AccountState> accountStates = valsSupplier.get();
         return srcAccounts.entrySet().stream()
                 .collect(Collectors.toMap(
-                        entry -> entry.getKey(),
+                        Map.Entry::getKey,
                         entry -> new StatefulAccount(entry.getValue(), accountStates.get(entry.getKey()))
                         )
                 );
@@ -178,6 +179,14 @@ public class AccountService {
         accountDao.addLogs(accountLogs);
         log.debug("Added c/r logs: {}", accountLogs.size());
         return resultAccStates;
+    }
+
+    public long getAccountAvailableAmount(long id, String time) {
+        log.debug("Get account available amount: {}", id);
+        long amount = accountDao.getStatefulAccountAvailableAmount(id,
+                TypeUtil.stringToLocalDateTime(time));
+        log.debug("Got account available amount: {}", id);
+        return amount;
     }
 
     private AccountLog createAccountLog(long batchId, String ppId, long accId, PostingOperation op,

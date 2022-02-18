@@ -81,12 +81,12 @@ public class AccountDaoImplNew extends NamedParameterJdbcDaoSupport implements A
                     ps.setBoolean(13, argument.isMerged());
                 });
         boolean checked = false;
-        for (int i = 0; i < updateCounts.length; ++i) {
-            for (int j = 0; j < updateCounts[i].length; ++j) {
+        for (int[] updateCount : updateCounts) {
+            for (int i : updateCount) {
                 checked = true;
-                if (updateCounts[i][j] != 1) {
+                if (i != 1) {
                     throw new DaoException(
-                            "Account log creation returned unexpected update count: " + updateCounts[i][j]);
+                            "Account log creation returned unexpected update count: " + i);
                 }
             }
         }
@@ -137,6 +137,25 @@ public class AccountDaoImplNew extends NamedParameterJdbcDaoSupport implements A
             } catch (NestedRuntimeException e) {
                 throw new DaoException(e);
             }
+        }
+    }
+
+    @Override
+    public long getStatefulAccountAvailableAmount(long id, LocalDateTime time) throws DaoException {
+        final String sql =
+                "select own_accumulated from shm.account_log where account_id = :id and creation_time <= :time " +
+                        "order by creation_time desc limit 1;";
+
+        MapSqlParameterSource params =
+                new MapSqlParameterSource()
+                        .addValue("id", id)
+                        .addValue("time", time, Types.OTHER);
+        try {
+            return getNamedParameterJdbcTemplate().queryForObject(sql, params, Long.class);
+        } catch (EmptyResultDataAccessException e) {
+            return 0L;
+        } catch (NestedRuntimeException e) {
+            throw new DaoException(e);
         }
     }
 
@@ -203,7 +222,7 @@ public class AccountDaoImplNew extends NamedParameterJdbcDaoSupport implements A
     }
 
     private Map<Long, AccountState> fillAbsentValues(Collection<Long> accountIds, Map<Long, AccountState> stateMap) {
-        accountIds.stream().forEach(id -> stateMap.putIfAbsent(id, new AccountState()));
+        accountIds.forEach(id -> stateMap.putIfAbsent(id, new AccountState()));
         return stateMap;
     }
 

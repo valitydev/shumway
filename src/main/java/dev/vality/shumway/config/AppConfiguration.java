@@ -19,13 +19,13 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class AppConfiguration {
 
     @Value("${db.jdbc.tr_timeout}")
-    private int transactionTimeout;
+    private int transactionTimeoutSec;
 
     @Bean
     public TransactionTemplate transactionTemplate(PlatformTransactionManager transactionManager) {
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
-        transactionTemplate.setTimeout(transactionTimeout);
+        transactionTemplate.setTimeout(transactionTimeoutSec);
         return transactionTemplate;
     }
 

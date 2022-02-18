@@ -60,7 +60,7 @@ public class AccounterHandler implements AccounterSrv.Iface {
 
     @Override
     public PostingPlanLog hold(PostingPlanChange planChange) throws TException {
-        return doSafeOperation(new PostingPlan(planChange.getId(), Arrays.asList(planChange.getBatch())),
+        return doSafeOperation(new PostingPlan(planChange.getId(), List.of(planChange.getBatch())),
                 PostingOperation.HOLD);
     }
 
@@ -82,8 +82,8 @@ public class AccounterHandler implements AccounterSrv.Iface {
             Map<Long, Account> affectedProtocolAccounts = affectedDomainStatefulAccounts.values()
                     .stream()
                     .collect(Collectors.toMap(
-                            domainStAccount -> domainStAccount.getId(),
-                            domainStAccount -> ProtocolConverter.convertFromDomainAccount(domainStAccount)
+                            dev.vality.shumway.domain.Account::getId,
+                            ProtocolConverter::convertFromDomainAccount
                     ));
             PostingPlanLog protocolPostingPlanLog = new PostingPlanLog(affectedProtocolAccounts);
             log.info("PostingPlanLog of affected accounts: {}", protocolPostingPlanLog);
@@ -145,7 +145,8 @@ public class AccounterHandler implements AccounterSrv.Iface {
                             isFinalOperation(operation)
                     );
                     resultAccStates = savedDomainStatefulAcc.values().stream()
-                            .collect(Collectors.toMap(acc -> acc.getId(), acc -> acc.getAccountState()));
+                            .collect(Collectors.toMap(dev.vality.shumway.domain.Account::getId,
+                                    StatefulAccount::getAccountState));
                 } else {
                     savedDomainStatefulAcc = accountService.getStatefulExclusiveAccounts(postingPlan.getBatchList());
                     AccounterValidator.validateAccounts(newProtocolBatches, savedDomainStatefulAcc);
@@ -178,7 +179,7 @@ public class AccounterHandler implements AccounterSrv.Iface {
                     }
                 }
                 log.info("Result account state is {}", resultAccStates);
-                return accountService.getStatefulAccounts(savedDomainStatefulAcc, () -> resultAccStates);
+                return AccountService.getStatefulAccounts(savedDomainStatefulAcc, () -> resultAccStates);
             }
         } catch (TException e) {
             throw new RuntimeException(e);
@@ -237,6 +238,20 @@ public class AccounterHandler implements AccounterSrv.Iface {
         }
         log.info("Response: {}", response);
         return response;
+    }
+
+    @Override
+    public long getAccountAvailableAmount(long id, String time) throws AccountNotFound, TException {
+        log.info("New GetAccountAvailableAmount request, id: {}", id);
+        try {
+            return accountService.getAccountAvailableAmount(id, time);
+        } catch (Exception e) {
+            log.error("Failed to get account available amount", e);
+            if (e instanceof DaoException) {
+                throw new WUnavailableResultException(e);
+            }
+            throw new TException(e);
+        }
     }
 
     @Override

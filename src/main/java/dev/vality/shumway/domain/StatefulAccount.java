@@ -7,7 +7,7 @@ import java.util.Objects;
  * Created by vpankrashkin on 17.09.16.
  */
 public class StatefulAccount extends Account {
-    private AccountState accountState;
+    private final AccountState accountState;
 
     public StatefulAccount(
             long id,
