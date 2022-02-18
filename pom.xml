@@ -27,8 +27,8 @@
         <db.host.port>5432</db.host.port>
         <db.name>shumway</db.name>
         <db.url>jdbc:postgresql://${db.host.name}:${db.host.port}/${db.name}</db.url>
-        <db.user>test</db.user>
-        <db.password>test</db.password>
+        <db.user>postgres</db.user>
+        <db.password>postgres</db.password>
         <db.schema>shm</db.schema>
         <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
         <testcontainers.version>1.16.3</testcontainers.version>

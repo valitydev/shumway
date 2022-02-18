@@ -36,7 +36,16 @@ spring:
       maximum-pool-size: 10
     password: '@db.password@'
     type: com.zaxxer.hikari.HikariDataSource
-    url: '@db.url@'
+    jdbc-url: '@db.url@'
+    username: '@db.user@'
+  payout-datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      idle-timeout: 30000
+      maximum-pool-size: 10
+    password: '@db.password@'
+    type: com.zaxxer.hikari.HikariDataSource
+    jdbc-url: '@db.url@'
     username: '@db.user@'
 
 db:

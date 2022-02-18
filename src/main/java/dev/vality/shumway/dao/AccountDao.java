@@ -23,8 +23,6 @@ public interface AccountDao {
 
     Map<Long, StatefulAccount> getStateful(Collection<Long> ids) throws DaoException;
 
-    long getStatefulAccountAvailableAmount(long id, LocalDateTime time) throws DaoException;
-
     Map<Long, StatefulAccount> getStatefulExclusive(Collection<Long> ids) throws DaoException;
 
     Map<Long, AccountState> getAccountStates(Collection<Long> accountIds) throws DaoException;

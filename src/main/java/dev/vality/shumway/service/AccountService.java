@@ -3,6 +3,7 @@ package dev.vality.shumway.service;
 import dev.vality.damsel.accounter.PostingBatch;
 import dev.vality.geck.common.util.TypeUtil;
 import dev.vality.shumway.dao.AccountDao;
+import dev.vality.shumway.dao.PayoutDao;
 import dev.vality.shumway.domain.Account;
 import dev.vality.shumway.domain.AccountLog;
 import dev.vality.shumway.domain.AccountState;
@@ -14,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -179,14 +179,6 @@ public class AccountService {
         accountDao.addLogs(accountLogs);
         log.debug("Added c/r logs: {}", accountLogs.size());
         return resultAccStates;
-    }
-
-    public long getAccountAvailableAmount(long id, String time) {
-        log.debug("Get account available amount: {}", id);
-        long amount = accountDao.getStatefulAccountAvailableAmount(id,
-                TypeUtil.stringToLocalDateTime(time));
-        log.debug("Got account available amount: {}", id);
-        return amount;
     }
 
     private AccountLog createAccountLog(long batchId, String ppId, long accId, PostingOperation op,

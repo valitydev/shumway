@@ -15,6 +15,7 @@ import dev.vality.shumway.domain.PostingLog;
 import dev.vality.shumway.domain.PostingOperation;
 import dev.vality.shumway.domain.StatefulAccount;
 import dev.vality.shumway.service.AccountService;
+import dev.vality.shumway.service.PayoutService;
 import dev.vality.shumway.service.PostingPlanService;
 import dev.vality.woody.api.flow.error.WUnavailableResultException;
 import org.apache.thrift.TException;
@@ -43,14 +44,17 @@ public class AccounterHandler implements AccounterSrv.Iface {
 
     private final AccountService accountService;
     private final PostingPlanService planService;
+    private final PayoutService payoutService;
 
     public AccounterHandler(
             AccountService accountService,
             PostingPlanService planService,
+            PayoutService payoutService,
             TransactionTemplate transactionTemplate
     ) {
         this.accountService = accountService;
         this.planService = planService;
+        this.payoutService = payoutService;
         this.transactionTemplate = transactionTemplate;
     }
 
@@ -244,7 +248,7 @@ public class AccounterHandler implements AccounterSrv.Iface {
     public long getAccountAvailableAmount(long id, String time) throws AccountNotFound, TException {
         log.info("New GetAccountAvailableAmount request, id: {}", id);
         try {
-            return accountService.getAccountAvailableAmount(id, time);
+            return payoutService.getAccountAvailableAmount(id, time);
         } catch (Exception e) {
             log.error("Failed to get account available amount", e);
             if (e instanceof DaoException) {

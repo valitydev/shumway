@@ -141,25 +141,6 @@ public class AccountDaoImplNew extends NamedParameterJdbcDaoSupport implements A
     }
 
     @Override
-    public long getStatefulAccountAvailableAmount(long id, LocalDateTime time) throws DaoException {
-        final String sql =
-                "select own_accumulated from shm.account_log where account_id = :id and creation_time <= :time " +
-                        "order by creation_time desc limit 1;";
-
-        MapSqlParameterSource params =
-                new MapSqlParameterSource()
-                        .addValue("id", id)
-                        .addValue("time", time, Types.OTHER);
-        try {
-            return getNamedParameterJdbcTemplate().queryForObject(sql, params, Long.class);
-        } catch (EmptyResultDataAccessException e) {
-            return 0L;
-        } catch (NestedRuntimeException e) {
-            throw new DaoException(e);
-        }
-    }
-
-    @Override
     public Map<Long, StatefulAccount> getStatefulUpTo(Collection<Long> ids, String planId, long batchId)
             throws DaoException {
         if (ids.isEmpty()) {
