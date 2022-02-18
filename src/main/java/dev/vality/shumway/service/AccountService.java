@@ -1,9 +1,7 @@
 package dev.vality.shumway.service;
 
 import dev.vality.damsel.accounter.PostingBatch;
-import dev.vality.geck.common.util.TypeUtil;
 import dev.vality.shumway.dao.AccountDao;
-import dev.vality.shumway.dao.PayoutDao;
 import dev.vality.shumway.domain.Account;
 import dev.vality.shumway.domain.AccountLog;
 import dev.vality.shumway.domain.AccountState;

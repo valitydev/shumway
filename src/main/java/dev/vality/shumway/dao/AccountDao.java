@@ -5,7 +5,6 @@ import dev.vality.shumway.domain.AccountLog;
 import dev.vality.shumway.domain.AccountState;
 import dev.vality.shumway.domain.StatefulAccount;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
