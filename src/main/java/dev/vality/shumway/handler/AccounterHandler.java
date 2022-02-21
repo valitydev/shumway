@@ -240,12 +240,17 @@ public class AccounterHandler implements AccounterSrv.Iface {
     }
 
     @Override
-    public long getAccountBalance(long id, String time) throws AccountNotFound, TException {
-        log.info("New GetAccountAvailableAmount request, id: {}", id);
+    public long getAccountBalance(long id, String fromTime, String toTime) throws AccountNotFound, TException {
+        log.info("New GetAccountBalance request, id: {}", id);
         try {
-            return accountService.getAccountAvailableAmount(id, time);
+            Long amount = accountService.getAccountAvailableAmount(id, fromTime, toTime);
+            if(amount == null) {
+                log.warn("Not found account with id: {}", id);
+                throw new AccountNotFound(id);
+            }
+            return amount;
         } catch (Exception e) {
-            log.error("Failed to get account available amount", e);
+            log.error("Failed to get account balance", e);
             if (e instanceof DaoException) {
                 throw new WUnavailableResultException(e);
             }

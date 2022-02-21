@@ -4,22 +4,12 @@ import dev.vality.damsel.accounter.PostingBatch;
 import dev.vality.geck.common.util.TypeUtil;
 import dev.vality.shumway.dao.AccountDao;
 import dev.vality.shumway.dao.AccountReplicaDao;
-import dev.vality.shumway.domain.Account;
-import dev.vality.shumway.domain.AccountLog;
-import dev.vality.shumway.domain.AccountState;
-import dev.vality.shumway.domain.PostingLog;
-import dev.vality.shumway.domain.PostingOperation;
-import dev.vality.shumway.domain.StatefulAccount;
+import dev.vality.shumway.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -185,12 +175,19 @@ public class AccountService {
         return resultAccStates;
     }
 
-    public long getAccountAvailableAmount(long id, String time) {
+    public Long getAccountAvailableAmount(long id, String fromTime, String toTime) {
         log.debug("Get account available amount: {}", id);
-        long amount = replicaDao.getAccountBalance(id,
-                TypeUtil.stringToLocalDateTime(time));
+        var amountOptional = replicaDao.getAccountBalance(id,
+                TypeUtil.stringToLocalDateTime(fromTime),
+                TypeUtil.stringToLocalDateTime(toTime));
+        if(amountOptional.isEmpty()) {
+            return null;
+        }
         log.debug("Got account available amount: {}", id);
-        return amount;
+        var amount = amountOptional.get();
+        var startAmount = amount.getStartAmount() == null ? 0L : amount.getStartAmount();
+        var finalAmount = amount.getFinalAmount() == null ? 0L : amount.getFinalAmount();
+        return finalAmount - startAmount;
     }
 
     private AccountLog createAccountLog(long batchId, String ppId, long accId, PostingOperation op,
