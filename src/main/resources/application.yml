@@ -38,7 +38,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     jdbc-url: '@db.url@'
     username: '@db.user@'
-  payout-datasource:
+  replica-datasource:
     driver-class-name: org.postgresql.Driver
     hikari:
       idle-timeout: 30000

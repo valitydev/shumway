@@ -1,11 +1,10 @@
 package dev.vality.shumway.config;
 
 import dev.vality.shumway.dao.AccountDao;
-import dev.vality.shumway.dao.PayoutDao;
+import dev.vality.shumway.dao.AccountReplicaDao;
 import dev.vality.shumway.dao.PostingPlanDao;
 import dev.vality.shumway.handler.AccounterHandler;
 import dev.vality.shumway.service.AccountService;
-import dev.vality.shumway.service.PayoutService;
 import dev.vality.shumway.service.PostingPlanService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,8 +31,8 @@ public class AppConfiguration {
     }
 
     @Bean
-    public AccountService accountService(AccountDao accountDao) {
-        return new AccountService(accountDao);
+    public AccountService accountService(AccountDao accountDao, AccountReplicaDao replicaDao) {
+        return new AccountService(accountDao, replicaDao);
     }
 
     @Bean
@@ -42,17 +41,11 @@ public class AppConfiguration {
     }
 
     @Bean
-    PayoutService payoutService(PayoutDao payoutDao) {
-        return new PayoutService(payoutDao);
-    }
-
-    @Bean
     AccounterHandler accounterHandler(
             AccountService accountService,
             PostingPlanService postingPlanService,
-            PayoutService payoutService,
             TransactionTemplate transactionTemplate
     ) {
-        return new AccounterHandler(accountService, postingPlanService, payoutService, transactionTemplate);
+        return new AccounterHandler(accountService, postingPlanService, transactionTemplate);
     }
 }

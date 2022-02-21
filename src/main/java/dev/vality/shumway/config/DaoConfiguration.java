@@ -1,10 +1,10 @@
 package dev.vality.shumway.config;
 
 import dev.vality.shumway.dao.AccountDao;
-import dev.vality.shumway.dao.PayoutDao;
+import dev.vality.shumway.dao.AccountReplicaDao;
 import dev.vality.shumway.dao.PostingPlanDao;
 import dev.vality.shumway.dao.impl.AccountDaoImplNew;
-import dev.vality.shumway.dao.impl.PayoutDaoImpl;
+import dev.vality.shumway.dao.impl.AccountReplicaDaoImpl;
 import dev.vality.shumway.dao.impl.PostingPlanDaoImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,8 +28,8 @@ public class DaoConfiguration {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "payoutDatasource")
-    @ConfigurationProperties(prefix = "spring.payout-datasource")
+    @Bean(name = "replicaDatasource")
+    @ConfigurationProperties(prefix = "spring.replica-datasource")
     public DataSource payoutDataSource() {
         return DataSourceBuilder.create().build();
     }
@@ -39,9 +39,9 @@ public class DaoConfiguration {
         return new AccountDaoImplNew(dataSource);
     }
 
-    @Bean(name = "payoutDao")
-    public PayoutDao payoutDao(@Qualifier("payoutDatasource") DataSource dataSource) {
-        return new PayoutDaoImpl(dataSource);
+    @Bean(name = "replicaDao")
+    public AccountReplicaDao payoutDao(@Qualifier("replicaDatasource") DataSource dataSource) {
+        return new AccountReplicaDaoImpl(dataSource);
     }
 
     @Bean(name = "postingPlanDao")

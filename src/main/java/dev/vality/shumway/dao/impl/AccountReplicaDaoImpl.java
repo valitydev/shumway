@@ -1,7 +1,7 @@
 package dev.vality.shumway.dao.impl;
 
 import dev.vality.shumway.dao.DaoException;
-import dev.vality.shumway.dao.PayoutDao;
+import dev.vality.shumway.dao.AccountReplicaDao;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,14 +11,14 @@ import javax.sql.DataSource;
 import java.sql.Types;
 import java.time.LocalDateTime;
 
-public class PayoutDaoImpl extends NamedParameterJdbcDaoSupport implements PayoutDao {
+public class AccountReplicaDaoImpl extends NamedParameterJdbcDaoSupport implements AccountReplicaDao {
 
-    public PayoutDaoImpl(DataSource ds) {
+    public AccountReplicaDaoImpl(DataSource ds) {
         setDataSource(ds);
     }
 
     @Override
-    public long getStatefulAccountAvailableAmount(long id, LocalDateTime time) throws DaoException {
+    public long getAccountBalance(long id, LocalDateTime time) throws DaoException {
         final String sql =
                 "select own_accumulated from shm.account_log where account_id = :id and creation_time <= :time " +
                         "order by creation_time desc limit 1;";
