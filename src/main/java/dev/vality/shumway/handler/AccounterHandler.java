@@ -244,7 +244,7 @@ public class AccounterHandler implements AccounterSrv.Iface {
         log.info("New GetAccountBalance request, id: {}", id);
         try {
             Long amount = accountService.getAccountAvailableAmount(id, fromTime, toTime);
-            if(amount == null) {
+            if (amount == null) {
                 log.warn("Not found account with id: {}", id);
                 throw new AccountNotFound(id);
             }

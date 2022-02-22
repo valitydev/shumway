@@ -25,13 +25,14 @@ public class AccountReplicaDaoImpl extends NamedParameterJdbcDaoSupport implemen
     }
 
     @Override
-    public Optional<AccountBalance> getAccountBalance(long id, LocalDateTime fromTime, LocalDateTime toTime) throws DaoException {
-        final String sql =
-            "select ac.id, al1.own_accumulated as start_balance, al2.own_accumulated as final_balance from shm.account ac " +
-                    "left join shm.account_log al1 on al1.account_id = ac.id and al1.creation_time <= :from_time " +
-                    "left join shm.account_log al2 on al2.account_id = ac.id and al2.creation_time < :to_time " +
-                    "where ac.id = :id " +
-                    "order by al1.creation_time, al2.creation_time desc limit 1;";
+    public Optional<AccountBalance> getAccountBalance(long id,
+                                                      LocalDateTime fromTime,
+                                                      LocalDateTime toTime) throws DaoException {
+        final String sql = "select ac.id, al1.own_accumulated as start_balance, al2.own_accumulated as final_balance " +
+                "from shm.account ac " +
+                "left join shm.account_log al1 on al1.account_id = ac.id and al1.creation_time <= :from_time " +
+                "left join shm.account_log al2 on al2.account_id = ac.id and al2.creation_time < :to_time " +
+                "where ac.id = :id order by al1.creation_time, al2.creation_time desc limit 1;";
 
         MapSqlParameterSource params =
                 new MapSqlParameterSource()

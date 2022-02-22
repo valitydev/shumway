@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface AccountReplicaDao {
 
-    Optional<AccountBalance> getAccountBalance(long id, LocalDateTime fromTime, LocalDateTime toTime) throws DaoException;
+    Optional<AccountBalance> getAccountBalance(long id,
+                                               LocalDateTime fromTime,
+                                               LocalDateTime toTime) throws DaoException;
 
 }

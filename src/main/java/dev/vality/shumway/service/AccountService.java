@@ -180,7 +180,7 @@ public class AccountService {
         var amountOptional = replicaDao.getAccountBalance(id,
                 TypeUtil.stringToLocalDateTime(fromTime),
                 TypeUtil.stringToLocalDateTime(toTime));
-        if(amountOptional.isEmpty()) {
+        if (amountOptional.isEmpty()) {
             return null;
         }
         log.debug("Got account available amount: {}", id);
