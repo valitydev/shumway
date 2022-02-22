@@ -51,9 +51,9 @@ public class AccountReplicaDaoImpl extends NamedParameterJdbcDaoSupport implemen
     private static class AccountBalanceMapper implements RowMapper<AccountBalance> {
         @Override
         public AccountBalance mapRow(ResultSet rs, int i) throws SQLException {
-            long id = rs.getObject("id", Long.class);
-            long startAmount = rs.getObject("start_balance", Long.class);
-            long finalAmount = rs.getObject("final_balance", Long.class);
+            Long id = rs.getObject("id", Long.class);
+            Long startAmount = rs.getObject("start_balance", Long.class);
+            Long finalAmount = rs.getObject("final_balance", Long.class);
             return new AccountBalance(id, startAmount, finalAmount);
         }
     }
