@@ -7,6 +7,7 @@ import dev.vality.shumway.dao.AccountReplicaDao;
 import dev.vality.shumway.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 
 import java.time.Instant;
 import java.util.*;
@@ -175,11 +176,14 @@ public class AccountService {
         return resultAccStates;
     }
 
-    public Long getAccountAvailableAmount(long id, String fromTime, String toTime) {
+    public Long getAccountAvailableAmount(long id, @Nullable String fromTime, String toTime) {
         log.debug("Get account available amount: {}", id);
-        var amountOptional = replicaDao.getAccountBalance(id,
+        var amountOptional = fromTime == null ?
+                replicaDao.getAccountBalance(id, TypeUtil.stringToLocalDateTime(toTime)) :
+                replicaDao.getAccountBalance(id,
                 TypeUtil.stringToLocalDateTime(fromTime),
                 TypeUtil.stringToLocalDateTime(toTime));
+
         if (amountOptional.isEmpty()) {
             return null;
         }

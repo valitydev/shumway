@@ -20,6 +20,7 @@ import dev.vality.woody.api.flow.error.WUnavailableResultException;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -240,7 +241,7 @@ public class AccounterHandler implements AccounterSrv.Iface {
     }
 
     @Override
-    public long getAccountBalance(long id, String fromTime, String toTime) throws AccountNotFound, TException {
+    public long getAccountBalance(long id, @Nullable String fromTime, String toTime) throws AccountNotFound, TException {
         log.info("New GetAccountBalance request, id: {}", id);
         try {
             Long amount = accountService.getAccountAvailableAmount(id, fromTime, toTime);

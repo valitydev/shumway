@@ -8,6 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
+import org.springframework.lang.Nullable;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -48,12 +49,36 @@ public class AccountReplicaDaoImpl extends NamedParameterJdbcDaoSupport implemen
         }
     }
 
+    @Override
+    public Optional<AccountBalance> getAccountBalance(long id, LocalDateTime toTime) throws DaoException {
+        final String sql = "select ac.id, al.own_accumulated as final_balance " +
+                "from shm.account ac " +
+                "left join shm.account_log al on al.account_id = ac.id and al.creation_time < :to_time " +
+                "where ac.id = :id order by al.creation_time desc limit 1;";
+
+        MapSqlParameterSource params =
+                new MapSqlParameterSource()
+                        .addValue("id", id)
+                        .addValue("to_time", toTime, Types.OTHER);
+        try {
+            return Optional.of(getNamedParameterJdbcTemplate().queryForObject(sql, params, balanceMapper));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        } catch (NestedRuntimeException e) {
+            throw new DaoException(e);
+        }
+    }
+
     private static class AccountBalanceMapper implements RowMapper<AccountBalance> {
         @Override
         public AccountBalance mapRow(ResultSet rs, int i) throws SQLException {
             Long id = rs.getObject("id", Long.class);
-            Long startAmount = rs.getObject("start_balance", Long.class);
             Long finalAmount = rs.getObject("final_balance", Long.class);
+            Long startAmount = null;
+
+            if(rs.getMetaData().getColumnCount() == 3) {
+                 startAmount = rs.getObject("start_balance", Long.class);
+            }
             return new AccountBalance(id, startAmount, finalAmount);
         }
     }
