@@ -241,7 +241,8 @@ public class AccounterHandler implements AccounterSrv.Iface {
     }
 
     @Override
-    public long getAccountBalance(long id, @Nullable String fromTime, String toTime) throws AccountNotFound, TException {
+    public long getAccountBalance(long id, @Nullable String fromTime, String toTime)
+            throws AccountNotFound, TException {
         log.info("New GetAccountBalance request, id: {}", id);
         try {
             Long amount = accountService.getAccountAvailableAmount(id, fromTime, toTime);

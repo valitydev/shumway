@@ -178,11 +178,10 @@ public class AccountService {
 
     public Long getAccountAvailableAmount(long id, @Nullable String fromTime, String toTime) {
         log.debug("Get account available amount: {}", id);
-        var amountOptional = fromTime == null ?
-                replicaDao.getAccountBalance(id, TypeUtil.stringToLocalDateTime(toTime)) :
-                replicaDao.getAccountBalance(id,
-                TypeUtil.stringToLocalDateTime(fromTime),
-                TypeUtil.stringToLocalDateTime(toTime));
+        var amountOptional = fromTime == null
+                ? replicaDao.getAccountBalance(id, TypeUtil.stringToLocalDateTime(toTime)) :
+                  replicaDao.getAccountBalance(id, TypeUtil.stringToLocalDateTime(fromTime),
+                        TypeUtil.stringToLocalDateTime(toTime));
 
         if (amountOptional.isEmpty()) {
             return null;
