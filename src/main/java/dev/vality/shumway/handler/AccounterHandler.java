@@ -241,11 +241,31 @@ public class AccounterHandler implements AccounterSrv.Iface {
     }
 
     @Override
-    public long getAccountBalance(long id, @Nullable String fromTime, String toTime)
+    public long getAccountBalanceDiff(long id, String fromTime, String toTime)
+            throws AccountNotFound, TException {
+        log.info("New GetAccountBalanceDiff request, id: {}", id);
+        try {
+            Long amount = accountService.getAccountAvailableAmount(id, fromTime, toTime);
+            if (amount == null) {
+                log.warn("Not found account with id: {}", id);
+                throw new AccountNotFound(id);
+            }
+            return amount;
+        } catch (Exception e) {
+            log.error("Failed to get account balance diff", e);
+            if (e instanceof DaoException) {
+                throw new WUnavailableResultException(e);
+            }
+            throw new TException(e);
+        }
+    }
+
+    @Override
+    public long getAccountBalance(long id, String dateTime)
             throws AccountNotFound, TException {
         log.info("New GetAccountBalance request, id: {}", id);
         try {
-            Long amount = accountService.getAccountAvailableAmount(id, fromTime, toTime);
+            Long amount = accountService.getAccountAvailableAmount(id, dateTime);
             if (amount == null) {
                 log.warn("Not found account with id: {}", id);
                 throw new AccountNotFound(id);

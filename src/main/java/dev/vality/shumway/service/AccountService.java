@@ -176,21 +176,27 @@ public class AccountService {
         return resultAccStates;
     }
 
-    public Long getAccountAvailableAmount(long id, @Nullable String fromTime, String toTime) {
-        log.debug("Get account available amount: {}", id);
-        var amountOptional = fromTime == null
-                ? replicaDao.getAccountBalance(id, TypeUtil.stringToLocalDateTime(toTime)) :
-                  replicaDao.getAccountBalance(id, TypeUtil.stringToLocalDateTime(fromTime),
-                        TypeUtil.stringToLocalDateTime(toTime));
-
-        if (amountOptional.isEmpty()) {
+    public Long getAccountAvailableAmount(long id, String fromTime, String toTime) {
+        log.debug("Get available amount for account with id: {}", id);
+        var from = TypeUtil.stringToLocalDateTime(fromTime);
+        var to = TypeUtil.stringToLocalDateTime(toTime);
+        var amount = replicaDao.getAccountBalanceDiff(id, from, to);
+        if (amount == null) {
             return null;
         }
-        log.debug("Got account available amount: {}", id);
-        var amount = amountOptional.get();
-        var startAmount = amount.getStartAmount() == null ? 0L : amount.getStartAmount();
-        var finalAmount = amount.getFinalAmount() == null ? 0L : amount.getFinalAmount();
-        return finalAmount - startAmount;
+        log.debug("Got available amount for account with id: {}", id);
+        return  amount;
+    }
+
+    public Long getAccountAvailableAmount(long id, String toTime) {
+        log.debug("Get available amount for account with id: {}", id);
+        var to = TypeUtil.stringToLocalDateTime(toTime);
+        var amount = replicaDao.getAccountBalance(id, to);
+        if (amount == null) {
+            return null;
+        }
+        log.debug("Got available amount for account with id: {}", id);
+        return  amount;
     }
 
     private AccountLog createAccountLog(long batchId, String ppId, long accId, PostingOperation op,

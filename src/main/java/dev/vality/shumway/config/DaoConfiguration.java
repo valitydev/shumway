@@ -30,7 +30,7 @@ public class DaoConfiguration {
 
     @Bean(name = "replicaDatasource")
     @ConfigurationProperties(prefix = "spring.replica-datasource")
-    public DataSource payoutDataSource() {
+    public DataSource replicaDataSource() {
         return DataSourceBuilder.create().build();
     }
 
@@ -40,7 +40,7 @@ public class DaoConfiguration {
     }
 
     @Bean(name = "replicaDao")
-    public AccountReplicaDao payoutDao(@Qualifier("replicaDatasource") DataSource dataSource) {
+    public AccountReplicaDao replicaDao(@Qualifier("replicaDatasource") DataSource dataSource) {
         return new AccountReplicaDaoImpl(dataSource);
     }
 
