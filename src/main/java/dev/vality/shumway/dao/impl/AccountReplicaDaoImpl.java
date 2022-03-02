@@ -26,17 +26,17 @@ public class AccountReplicaDaoImpl extends NamedParameterJdbcDaoSupport implemen
     public Long getAccountBalanceDiff(long id, LocalDateTime fromTime, LocalDateTime toTime) throws DaoException {
         final String sql = """
                 with finish_amount as
-                (select id, own_accumulated from shm.account_log
-                    where id = :id and creation_time < :to_time
+                (select account_id, own_accumulated from shm.account_log
+                    where account_id = :id and creation_time < :to_time
                         order by creation_time desc limit 1),
                     start_amount as
-                    (select id, own_accumulated from shm.account_log
-                        where id = :id and creation_time < :from_time
+                    (select account_id, own_accumulated from shm.account_log
+                        where account_id = :id and creation_time < :from_time
                             order by creation_time desc limit 1)
                 select coalesce(finish_amount.own_accumulated, 0) - coalesce(start_amount.own_accumulated, 0) as balance
                 from  shm.account a
-                left join finish_amount on a.id = finish_amount.id
-                left join start_amount on a.id = start_amount.id
+                left join finish_amount on a.id = finish_amount.account_id
+                left join start_amount on a.id = start_amount.account_id
                 where a.id = :id""";
 
         MapSqlParameterSource params =
@@ -55,12 +55,12 @@ public class AccountReplicaDaoImpl extends NamedParameterJdbcDaoSupport implemen
     public Long getAccountBalance(long id, LocalDateTime dateTime) throws DaoException {
         final String sql = """
                 with current_amount as
-                (select id, own_accumulated from shm.account_log
-                    where id = :id and creation_time < :to_time
+                (select account_id, own_accumulated from shm.account_log
+                    where account_id = :id and creation_time < :to_time
                         order by creation_time desc limit 1)
                 select coalesce(current_amount.own_accumulated, 0) as balance
                 from  shm.account a
-                left join current_amount on a.id = current_amount.id
+                left join current_amount on a.id = current_amount.account_id
                 where a.id = :id""";
 
         MapSqlParameterSource params =
