@@ -1,24 +1,16 @@
 package dev.vality.shumway.service;
 
 import dev.vality.damsel.accounter.PostingBatch;
+import dev.vality.geck.common.util.TypeUtil;
 import dev.vality.shumway.dao.AccountDao;
-import dev.vality.shumway.domain.Account;
-import dev.vality.shumway.domain.AccountLog;
-import dev.vality.shumway.domain.AccountState;
-import dev.vality.shumway.domain.PostingLog;
-import dev.vality.shumway.domain.PostingOperation;
-import dev.vality.shumway.domain.StatefulAccount;
+import dev.vality.shumway.dao.AccountReplicaDao;
+import dev.vality.shumway.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -30,24 +22,28 @@ import java.util.stream.Stream;
 public class AccountService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private final AccountDao accountDao;
+    private final AccountDao masterDao;
+    private final AccountReplicaDao replicaDao;
+
     private final Function<Collection<PostingBatch>, Set<Long>> getUnicAccountIds = (batches) -> batches
             .stream()
             .flatMap(batch -> batch.getPostings().stream())
             .flatMap(posting -> Stream.of(posting.getFromId(), posting.getToId()))
             .collect(Collectors.toSet());
 
-    public AccountService(AccountDao accountDao) {
-        this.accountDao = accountDao;
+    public AccountService(AccountDao masterDao,
+                          AccountReplicaDao replicaDao) {
+        this.masterDao = masterDao;
+        this.replicaDao = replicaDao;
     }
 
     public long createAccount(Account prototype) {
-        return accountDao.add(prototype);
+        return masterDao.add(prototype);
     }
 
     public StatefulAccount getStatefulAccount(long id) {
         log.debug("Get stateful account: {}", id);
-        Map<Long, StatefulAccount> result = accountDao.getStateful(Arrays.asList(id));
+        Map<Long, StatefulAccount> result = masterDao.getStateful(List.of(id));
         log.debug("Got accounts: {}:{}", result.size(), result.values());
         return result.get(id);
     }
@@ -55,7 +51,7 @@ public class AccountService {
     public Map<Long, StatefulAccount> getStatefulAccounts(Collection<PostingBatch> batches) {
         Collection<Long> uniqAccIds = getUnicAccountIds.apply(batches);
         log.debug("Get stateful accounts: {}", uniqAccIds);
-        Map<Long, StatefulAccount> result = accountDao.getStateful(uniqAccIds);
+        Map<Long, StatefulAccount> result = masterDao.getStateful(uniqAccIds);
         log.debug("Got accounts: {}:{}", result.size(), result.values());
         return result;
     }
@@ -65,7 +61,7 @@ public class AccountService {
         Map<Long, AccountState> accountStates = valsSupplier.get();
         return srcAccounts.entrySet().stream()
                 .collect(Collectors.toMap(
-                        entry -> entry.getKey(),
+                        Map.Entry::getKey,
                         entry -> new StatefulAccount(entry.getValue(), accountStates.get(entry.getKey()))
                         )
                 );
@@ -79,7 +75,7 @@ public class AccountService {
         long lastBatchId = finalOp ? Long.MAX_VALUE : batches.stream().mapToLong(PostingBatch::getId).max().getAsLong();
         Collection<Long> uniqAccIds = getUnicAccountIds.apply(batches);
         log.debug("Get stateful accounts: {}, plan: {}, up to batch: {}", uniqAccIds, planId, lastBatchId);
-        Map<Long, StatefulAccount> result = accountDao.getStatefulUpTo(uniqAccIds, planId, lastBatchId);
+        Map<Long, StatefulAccount> result = masterDao.getStatefulUpTo(uniqAccIds, planId, lastBatchId);
         log.debug("Got accounts: {}:{}", result.size(), result.values());
         return result;
     }
@@ -87,7 +83,7 @@ public class AccountService {
     public Map<Long, StatefulAccount> getStatefulExclusiveAccounts(Collection<PostingBatch> batches) {
         Collection<Long> uniqAccIds = getUnicAccountIds.apply(batches);
         log.debug("Get stateful exclusive accounts by ids: {}", uniqAccIds);
-        Map<Long, StatefulAccount> result = accountDao.getStatefulExclusive(uniqAccIds);
+        Map<Long, StatefulAccount> result = masterDao.getStatefulExclusive(uniqAccIds);
         log.debug("Got exclusive accounts: {}:{}", result.size(), result.values());
         return result;
     }
@@ -147,7 +143,7 @@ public class AccountService {
                     accountLog.getMaxAccumulated()));
         }
         log.debug("Add account hold logs: {}", accountLogs);
-        accountDao.addLogs(accountLogs);
+        masterDao.addLogs(accountLogs);
         log.debug("Added hold logs: {}", accountLogs.size());
         return resultAccStates;
     }
@@ -175,9 +171,32 @@ public class AccountService {
                     accountLog.getMaxAccumulated()));
         }
         log.debug("Add account c/r logs: {}", accountLogs);
-        accountDao.addLogs(accountLogs);
+        masterDao.addLogs(accountLogs);
         log.debug("Added c/r logs: {}", accountLogs.size());
         return resultAccStates;
+    }
+
+    public Long getAccountAvailableAmount(long id, String fromTime, String toTime) {
+        log.debug("Get available amount for account with id: {}", id);
+        var from = TypeUtil.stringToLocalDateTime(fromTime);
+        var to = TypeUtil.stringToLocalDateTime(toTime);
+        var amount = replicaDao.getAccountBalanceDiff(id, from, to);
+        if (amount == null) {
+            return null;
+        }
+        log.debug("Got available amount for account with id: {}", id);
+        return  amount;
+    }
+
+    public Long getAccountAvailableAmount(long id, String toTime) {
+        log.debug("Get available amount for account with id: {}", id);
+        var to = TypeUtil.stringToLocalDateTime(toTime);
+        var amount = replicaDao.getAccountBalance(id, to);
+        if (amount == null) {
+            return null;
+        }
+        log.debug("Got available amount for account with id: {}", id);
+        return  amount;
     }
 
     private AccountLog createAccountLog(long batchId, String ppId, long accId, PostingOperation op,

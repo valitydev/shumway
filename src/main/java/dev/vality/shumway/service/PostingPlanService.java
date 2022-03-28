@@ -17,7 +17,7 @@ import java.util.Map;
 public class PostingPlanService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private PostingPlanDao postingPlanDao;
+    private final PostingPlanDao postingPlanDao;
 
     public PostingPlanService(PostingPlanDao postingPlanDao) {
         this.postingPlanDao = postingPlanDao;

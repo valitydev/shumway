@@ -20,10 +20,10 @@ import dev.vality.woody.api.flow.error.WUnavailableResultException;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +60,7 @@ public class AccounterHandler implements AccounterSrv.Iface {
 
     @Override
     public PostingPlanLog hold(PostingPlanChange planChange) throws TException {
-        return doSafeOperation(new PostingPlan(planChange.getId(), Arrays.asList(planChange.getBatch())),
+        return doSafeOperation(new PostingPlan(planChange.getId(), List.of(planChange.getBatch())),
                 PostingOperation.HOLD);
     }
 
@@ -82,8 +82,8 @@ public class AccounterHandler implements AccounterSrv.Iface {
             Map<Long, Account> affectedProtocolAccounts = affectedDomainStatefulAccounts.values()
                     .stream()
                     .collect(Collectors.toMap(
-                            domainStAccount -> domainStAccount.getId(),
-                            domainStAccount -> ProtocolConverter.convertFromDomainAccount(domainStAccount)
+                            dev.vality.shumway.domain.Account::getId,
+                            ProtocolConverter::convertFromDomainAccount
                     ));
             PostingPlanLog protocolPostingPlanLog = new PostingPlanLog(affectedProtocolAccounts);
             log.info("PostingPlanLog of affected accounts: {}", protocolPostingPlanLog);
@@ -145,7 +145,8 @@ public class AccounterHandler implements AccounterSrv.Iface {
                             isFinalOperation(operation)
                     );
                     resultAccStates = savedDomainStatefulAcc.values().stream()
-                            .collect(Collectors.toMap(acc -> acc.getId(), acc -> acc.getAccountState()));
+                            .collect(Collectors.toMap(dev.vality.shumway.domain.Account::getId,
+                                    StatefulAccount::getAccountState));
                 } else {
                     savedDomainStatefulAcc = accountService.getStatefulExclusiveAccounts(postingPlan.getBatchList());
                     AccounterValidator.validateAccounts(newProtocolBatches, savedDomainStatefulAcc);
@@ -178,7 +179,7 @@ public class AccounterHandler implements AccounterSrv.Iface {
                     }
                 }
                 log.info("Result account state is {}", resultAccStates);
-                return accountService.getStatefulAccounts(savedDomainStatefulAcc, () -> resultAccStates);
+                return AccountService.getStatefulAccounts(savedDomainStatefulAcc, () -> resultAccStates);
             }
         } catch (TException e) {
             throw new RuntimeException(e);
@@ -237,6 +238,46 @@ public class AccounterHandler implements AccounterSrv.Iface {
         }
         log.info("Response: {}", response);
         return response;
+    }
+
+    @Override
+    public long getAccountBalanceDiff(long id, String fromTime, String toTime)
+            throws AccountNotFound, TException {
+        log.info("New GetAccountBalanceDiff request, id: {}", id);
+        try {
+            Long amount = accountService.getAccountAvailableAmount(id, fromTime, toTime);
+            if (amount == null) {
+                log.warn("Not found account with id: {}", id);
+                throw new AccountNotFound(id);
+            }
+            return amount;
+        } catch (Exception e) {
+            log.error("Failed to get account balance diff", e);
+            if (e instanceof DaoException) {
+                throw new WUnavailableResultException(e);
+            }
+            throw new TException(e);
+        }
+    }
+
+    @Override
+    public long getAccountBalance(long id, String dateTime)
+            throws AccountNotFound, TException {
+        log.info("New GetAccountBalance request, id: {}", id);
+        try {
+            Long amount = accountService.getAccountAvailableAmount(id, dateTime);
+            if (amount == null) {
+                log.warn("Not found account with id: {}", id);
+                throw new AccountNotFound(id);
+            }
+            return amount;
+        } catch (Exception e) {
+            log.error("Failed to get account balance", e);
+            if (e instanceof DaoException) {
+                throw new WUnavailableResultException(e);
+            }
+            throw new TException(e);
+        }
     }
 
     @Override

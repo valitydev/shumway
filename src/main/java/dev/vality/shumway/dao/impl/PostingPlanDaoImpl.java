@@ -136,12 +136,12 @@ public class PostingPlanDaoImpl extends NamedParameterJdbcDaoSupport implements 
                     ps.setString(9, argument.getDescription());
                 });
         boolean checked = false;
-        for (int i = 0; i < updateCounts.length; ++i) {
-            for (int j = 0; j < updateCounts[i].length; ++j) {
+        for (int[] updateCount : updateCounts) {
+            for (int i : updateCount) {
                 checked = true;
-                if (updateCounts[i][j] != 1) {
+                if (i != 1) {
                     throw new DaoException(
-                            "Posting log creation returned unexpected update count: " + updateCounts[i][j]);
+                            "Posting log creation returned unexpected update count: " + i);
                 }
             }
         }
@@ -152,7 +152,7 @@ public class PostingPlanDaoImpl extends NamedParameterJdbcDaoSupport implements 
 
     private Map<Long, List<PostingLog>> fillAbsentValues(Collection<Long> batchIds,
                                                          Map<Long, List<PostingLog>> stateMap) {
-        batchIds.stream().forEach(id -> stateMap.putIfAbsent(id, Collections.emptyList()));
+        batchIds.forEach(id -> stateMap.putIfAbsent(id, Collections.emptyList()));
         return stateMap;
     }
 

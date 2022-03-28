@@ -80,12 +80,10 @@ public class ProtocolConverter {
             PostingOperation domainPostingOperation
     ) {
         long lastBatchId = protocolPostingPlan.getBatchList().stream()
-                .mapToLong(batch -> batch.getId())
+                .mapToLong(PostingBatch::getId)
                 .max()
                 .getAsLong();
-        PostingPlanLog domainPlanLog =
-                new PostingPlanLog(protocolPostingPlan.getId(), Instant.now(), domainPostingOperation, lastBatchId);
-        return domainPlanLog;
+        return new PostingPlanLog(protocolPostingPlan.getId(), Instant.now(), domainPostingOperation, lastBatchId);
     }
 
     public static PostingBatch convertFromDomainToBatch(long batchId, List<PostingLog> domainPostings) {

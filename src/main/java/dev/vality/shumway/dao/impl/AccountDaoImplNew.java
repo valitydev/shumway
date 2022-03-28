@@ -81,12 +81,12 @@ public class AccountDaoImplNew extends NamedParameterJdbcDaoSupport implements A
                     ps.setBoolean(13, argument.isMerged());
                 });
         boolean checked = false;
-        for (int i = 0; i < updateCounts.length; ++i) {
-            for (int j = 0; j < updateCounts[i].length; ++j) {
+        for (int[] updateCount : updateCounts) {
+            for (int i : updateCount) {
                 checked = true;
-                if (updateCounts[i][j] != 1) {
+                if (i != 1) {
                     throw new DaoException(
-                            "Account log creation returned unexpected update count: " + updateCounts[i][j]);
+                            "Account log creation returned unexpected update count: " + i);
                 }
             }
         }
@@ -203,7 +203,7 @@ public class AccountDaoImplNew extends NamedParameterJdbcDaoSupport implements A
     }
 
     private Map<Long, AccountState> fillAbsentValues(Collection<Long> accountIds, Map<Long, AccountState> stateMap) {
-        accountIds.stream().forEach(id -> stateMap.putIfAbsent(id, new AccountState()));
+        accountIds.forEach(id -> stateMap.putIfAbsent(id, new AccountState()));
         return stateMap;
     }
 

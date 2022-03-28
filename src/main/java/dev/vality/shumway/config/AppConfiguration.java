@@ -1,6 +1,7 @@
 package dev.vality.shumway.config;
 
 import dev.vality.shumway.dao.AccountDao;
+import dev.vality.shumway.dao.AccountReplicaDao;
 import dev.vality.shumway.dao.PostingPlanDao;
 import dev.vality.shumway.handler.AccounterHandler;
 import dev.vality.shumway.service.AccountService;
@@ -19,19 +20,19 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class AppConfiguration {
 
     @Value("${db.jdbc.tr_timeout}")
-    private int transactionTimeout;
+    private int transactionTimeoutSec;
 
     @Bean
     public TransactionTemplate transactionTemplate(PlatformTransactionManager transactionManager) {
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
-        transactionTemplate.setTimeout(transactionTimeout);
+        transactionTemplate.setTimeout(transactionTimeoutSec);
         return transactionTemplate;
     }
 
     @Bean
-    public AccountService accountService(AccountDao accountDao) {
-        return new AccountService(accountDao);
+    public AccountService accountService(AccountDao accountDao, AccountReplicaDao replicaDao) {
+        return new AccountService(accountDao, replicaDao);
     }
 
     @Bean
