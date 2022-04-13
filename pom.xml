@@ -33,7 +33,7 @@
         <db.schema>shm</db.schema>
 
         <shumpune-proto.version>1.15-4c87f03</shumpune-proto.version>
-        <logstash-logback-encoder.version>5.0</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>7.1.1</logstash-logback-encoder.version>
         <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
         <easyway.version>0.2.0</easyway.version>
         <testcontainers.version>1.14.3</testcontainers.version>
