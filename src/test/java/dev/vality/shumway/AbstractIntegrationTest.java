@@ -2,7 +2,6 @@ package dev.vality.shumway;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
@@ -35,6 +34,7 @@ public abstract class AbstractIntegrationTest {
         private static void initDockerEnv(ConfigurableApplicationContext configurableApplicationContext) {
             TestPropertyValues.of(
                     "spring.datasource.url=" + postgres.getJdbcUrl(),
+                    "spring.datasource.jdbc-url=" + postgres.getJdbcUrl(),
                     "spring.datasource.username=" + postgres.getUsername(),
                     "spring.datasource.password=" + postgres.getPassword(),
                     "flyway.url=" + postgres.getJdbcUrl(),

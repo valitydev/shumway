@@ -13,7 +13,7 @@
     <parent>
         <groupId>dev.vality</groupId>
         <artifactId>service-parent-pom</artifactId>
-        <version>1.0.10</version>
+        <version>1.0.16</version>
     </parent>
 
     <properties>
@@ -103,7 +103,6 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>damsel</artifactId>
-            <version>1.555-bb0ee3a</version>
         </dependency>
         <dependency>
             <groupId>dev.vality</groupId>
