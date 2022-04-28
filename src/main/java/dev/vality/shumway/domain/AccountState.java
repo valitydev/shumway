@@ -2,9 +2,6 @@ package dev.vality.shumway.domain;
 
 import java.util.Objects;
 
-/**
- * Created by vpankrashkin on 18.09.16.
- */
 public class AccountState {
     private final long ownAmount;
     private final long minAccumulatedDiff;

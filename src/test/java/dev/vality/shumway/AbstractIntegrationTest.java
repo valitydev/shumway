@@ -12,9 +12,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-/**
- * Created by jeckep on 08.02.17.
- */
 
 @Testcontainers
 @SpringBootTest(webEnvironment = RANDOM_PORT)

@@ -16,9 +16,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Created by vpankrashkin on 16.09.16.
- */
 public class AccountService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 

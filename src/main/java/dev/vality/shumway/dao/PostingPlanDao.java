@@ -7,9 +7,6 @@ import dev.vality.shumway.domain.PostingPlanLog;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by vpankrashkin on 16.09.16.
- */
 public interface PostingPlanDao {
 
     /**

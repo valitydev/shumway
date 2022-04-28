@@ -15,9 +15,6 @@ import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 
-/**
- * Created by vpankrashkin on 30.06.16.
- */
 @Configuration
 public class DaoConfiguration {
 

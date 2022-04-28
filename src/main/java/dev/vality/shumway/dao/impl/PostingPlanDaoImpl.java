@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Created by vpankrashkin on 18.09.16.
- */
 public class PostingPlanDaoImpl extends NamedParameterJdbcDaoSupport implements PostingPlanDao {
     private static final int BATCH_SIZE = 1000;
 

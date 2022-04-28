@@ -13,9 +13,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
-/**
- * Created by vpankrashkin on 20.09.16.
- */
 @Configuration
 public class AppConfiguration {
 

@@ -33,9 +33,6 @@ import static dev.vality.shumway.handler.ProtocolConverter.convertFromDomainAcco
 import static dev.vality.shumway.handler.ProtocolConverter.convertFromDomainToBatch;
 import static dev.vality.shumway.handler.ProtocolConverter.convertToDomainAccount;
 
-/**
- * Created by vpankrashkin on 16.09.16.
- */
 public class AccounterHandler implements AccounterSrv.Iface {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 

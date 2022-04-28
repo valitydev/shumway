@@ -1,8 +1,5 @@
 package dev.vality.shumway.dao;
 
-/**
- * Created by vpankrashkin on 16.09.16.
- */
 public class DaoException extends RuntimeException {
     public DaoException() {
     }

@@ -3,9 +3,6 @@ package dev.vality.shumway.domain;
 import java.time.Instant;
 import java.util.Objects;
 
-/**
- * Created by vpankrashkin on 14.09.16.
- */
 public class AccountLog {
     private final long id;
     private final long batchId;

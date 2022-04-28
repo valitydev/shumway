@@ -11,9 +11,6 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by vpankrashkin on 16.09.16.
- */
 public class PostingPlanService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 

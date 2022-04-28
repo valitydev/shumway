@@ -14,9 +14,6 @@ import javax.servlet.annotation.WebServlet;
 
 import java.io.IOException;
 
-/**
- * Created by vpankrashkin on 30.06.16.
- */
 
 @WebServlet("/accounter")
 public class AccounterServlet extends GenericServlet {

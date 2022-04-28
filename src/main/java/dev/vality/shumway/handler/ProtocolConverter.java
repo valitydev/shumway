@@ -16,9 +16,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by vpankrashkin on 19.09.16.
- */
 public class ProtocolConverter {
 
     public static Account convertToDomainAccount(AccountPrototype protocolPrototype) {

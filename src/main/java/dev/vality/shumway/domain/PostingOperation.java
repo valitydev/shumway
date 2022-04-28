@@ -3,9 +3,6 @@ package dev.vality.shumway.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by vpankrashkin on 14.09.16.
- */
 public enum PostingOperation {
     HOLD("HOLD"), COMMIT("COMMIT"), ROLLBACK("ROLLBACK");
 

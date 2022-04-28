@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by vpankrashkin on 24.11.16.
- */
 @Component
 public class SupportAccountDao extends NamedParameterJdbcDaoSupport {
     static final int BATCH_SIZE = 10000;
