@@ -1,16 +1,11 @@
 server:
-  port: @server.port@
+  port: '@server.port@'
 
 management:
-  security:
-    flag: false
   server:
-    port: @management.port@
+    port: '@management.port@'
   metrics:
     export:
-      statsd:
-        flavor: etsy
-        enabled: false
       prometheus:
         enabled: false
   endpoint:
@@ -41,7 +36,16 @@ spring:
       maximum-pool-size: 10
     password: '@db.password@'
     type: com.zaxxer.hikari.HikariDataSource
-    url: '@db.url@'
+    jdbc-url: '@db.url@'
+    username: '@db.user@'
+  replica-datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      idle-timeout: 30000
+      maximum-pool-size: 10
+    password: '@db.password@'
+    type: com.zaxxer.hikari.HikariDataSource
+    jdbc-url: '@db.url@'
     username: '@db.user@'
 
 db:
