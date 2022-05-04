@@ -36,7 +36,7 @@ spring:
       maximum-pool-size: 10
     password: '@db.password@'
     type: com.zaxxer.hikari.HikariDataSource
-    jdbc-url: '@db.url@'
+    url: '@db.url@'
     username: '@db.user@'
   replica-datasource:
     driver-class-name: org.postgresql.Driver
@@ -45,7 +45,7 @@ spring:
       maximum-pool-size: 10
     password: '@db.password@'
     type: com.zaxxer.hikari.HikariDataSource
-    jdbc-url: '@db.url@'
+    url: '@db.url@'
     username: '@db.user@'
 
 db:

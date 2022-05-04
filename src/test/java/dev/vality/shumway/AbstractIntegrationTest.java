@@ -31,7 +31,6 @@ public abstract class AbstractIntegrationTest {
         private static void initDockerEnv(ConfigurableApplicationContext configurableApplicationContext) {
             TestPropertyValues.of(
                     "spring.datasource.url=" + postgres.getJdbcUrl(),
-                    "spring.datasource.jdbc-url=" + postgres.getJdbcUrl(),
                     "spring.datasource.username=" + postgres.getUsername(),
                     "spring.datasource.password=" + postgres.getPassword(),
                     "flyway.url=" + postgres.getJdbcUrl(),
