@@ -7,6 +7,7 @@ import dev.vality.shumway.dao.impl.AccountDaoImplNew;
 import dev.vality.shumway.dao.impl.AccountReplicaDaoImpl;
 import dev.vality.shumway.dao.impl.PostingPlanDaoImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -21,14 +22,20 @@ public class DaoConfiguration {
     @Bean
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
+    public DataSource dataSource(@Value("${spring.datasource.url}") String url) {
+        return DataSourceBuilder
+                .create()
+                .url(url)
+                .build();
     }
 
     @Bean(name = "replicaDatasource")
     @ConfigurationProperties(prefix = "spring.replica-datasource")
-    public DataSource replicaDataSource() {
-        return DataSourceBuilder.create().build();
+    public DataSource replicaDataSource(@Value("${spring.replica-datasource.url}") String url) {
+        return DataSourceBuilder
+                .create()
+                .url(url)
+                .build();
     }
 
     @Bean(name = "accountDao")
