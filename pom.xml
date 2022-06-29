@@ -13,7 +13,7 @@
     <parent>
         <groupId>dev.vality</groupId>
         <artifactId>service-parent-pom</artifactId>
-        <version>1.0.16</version>
+        <version>1.0.17</version>
     </parent>
 
     <properties>
@@ -31,7 +31,7 @@
         <db.password>postgres</db.password>
         <db.schema>shm</db.schema>
         <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
-        <testcontainers.version>1.16.3</testcontainers.version>
+        <testcontainers.version>1.17.3</testcontainers.version>
     </properties>
 
     <dependencies>
@@ -147,7 +147,7 @@
         <dependency>
             <groupId>com.palantir.docker.compose</groupId>
             <artifactId>docker-compose-rule-junit4</artifactId>
-            <version>1.0.0</version>
+            <version>1.8.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.hamcrest</groupId>
@@ -216,7 +216,7 @@
                     <dependency>
                         <groupId>org.apache.maven.shared</groupId>
                         <artifactId>maven-filtering</artifactId>
-                        <version>3.2.0</version>
+                        <version>3.3.0</version>
                     </dependency>
                 </dependencies>
                 <configuration>
