@@ -45,6 +45,3 @@ spring:
 db:
   jdbc:
     tr_timeout: 10000
-
-logging.level.com.zaxxer.hikari.HikariConfig: DEBUG
-logging.level.com.zaxxer.hikari: TRACE
