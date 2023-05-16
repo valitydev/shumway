@@ -30,21 +30,15 @@ spring:
   application:
     name: '@project.name@'
   datasource:
-    driver-class-name: org.postgresql.Driver
     hikari:
       idle-timeout: 30000
-      maximum-pool-size: 10
+      leak-detection-threshold: 60000
+      data-source-properties:
+        prepareThreshold: 0
+      maximum-pool-size: 50
+      max-lifetime: 300000
+      minimum-idle: 2
     password: '@db.password@'
-    type: com.zaxxer.hikari.HikariDataSource
-    url: '@db.url@'
-    username: '@db.user@'
-  replica-datasource:
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      idle-timeout: 30000
-      maximum-pool-size: 10
-    password: '@db.password@'
-    type: com.zaxxer.hikari.HikariDataSource
     url: '@db.url@'
     username: '@db.user@'
 
