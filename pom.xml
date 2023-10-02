@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>shumway</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>shumway</name>
@@ -13,7 +13,7 @@
     <parent>
         <groupId>dev.vality</groupId>
         <artifactId>service-parent-pom</artifactId>
-        <version>1.0.16</version>
+        <version>1.0.20</version>
     </parent>
 
     <properties>
@@ -31,7 +31,7 @@
         <db.password>postgres</db.password>
         <db.schema>shm</db.schema>
         <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
-        <testcontainers.version>1.16.3</testcontainers.version>
+        <testcontainers.version>1.19.1</testcontainers.version>
     </properties>
 
     <dependencies>
@@ -147,7 +147,7 @@
         <dependency>
             <groupId>com.palantir.docker.compose</groupId>
             <artifactId>docker-compose-rule-junit4</artifactId>
-            <version>1.0.0</version>
+            <version>1.9.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.hamcrest</groupId>
@@ -211,12 +211,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-remote-resources-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.shared</groupId>
                         <artifactId>maven-filtering</artifactId>
-                        <version>3.2.0</version>
+                        <version>3.3.1</version>
                     </dependency>
                 </dependencies>
                 <configuration>
