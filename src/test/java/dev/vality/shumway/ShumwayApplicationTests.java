@@ -1,16 +1,6 @@
 package dev.vality.shumway;
 
-import dev.vality.damsel.accounter.Account;
-import dev.vality.damsel.accounter.AccountNotFound;
-import dev.vality.damsel.accounter.AccountPrototype;
-import dev.vality.damsel.accounter.AccounterSrv;
-import dev.vality.damsel.accounter.InvalidPostingParams;
-import dev.vality.damsel.accounter.PlanNotFound;
-import dev.vality.damsel.accounter.Posting;
-import dev.vality.damsel.accounter.PostingBatch;
-import dev.vality.damsel.accounter.PostingPlan;
-import dev.vality.damsel.accounter.PostingPlanChange;
-import dev.vality.damsel.accounter.PostingPlanLog;
+import dev.vality.damsel.accounter.*;
 import dev.vality.damsel.base.InvalidRequest;
 import dev.vality.geck.common.util.TypeUtil;
 import dev.vality.shumway.handler.AccounterValidator;
@@ -21,10 +11,9 @@ import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
 import javax.annotation.PostConstruct;
-
 import java.net.URI;
 import java.time.Instant;
 import java.util.Arrays;
@@ -766,7 +755,7 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
         };
 
         Stream.of(commitLog.getAffectedAccounts().get(fromAccountId1),
-                commitLog.getAffectedAccounts().get(toAccountId1))
+                        commitLog.getAffectedAccounts().get(toAccountId1))
                 .forEach(check);
 
         planId = "" + (planIdNum + 1);
@@ -775,13 +764,13 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
         PostingPlanLog combinedPlanLog = client.hold(new PostingPlanChange(planId, combinedBatch));
 
         Stream.of(combinedPlanLog.getAffectedAccounts().get(fromAccountId1),
-                combinedPlanLog.getAffectedAccounts().get(toAccountId1))
+                        combinedPlanLog.getAffectedAccounts().get(toAccountId1))
                 .forEach(check);
 
         PostingPlanLog commitCombinedPlanLog = client.commitPlan(new PostingPlan(planId, asList(combinedBatch)));
 
         Stream.of(commitCombinedPlanLog.getAffectedAccounts().get(fromAccountId1),
-                commitCombinedPlanLog.getAffectedAccounts().get(toAccountId1))
+                        commitCombinedPlanLog.getAffectedAccounts().get(toAccountId1))
                 .forEach(check);
     }
 
