@@ -4,21 +4,17 @@ server:
 management:
   server:
     port: '@management.port@'
-  metrics:
-    export:
-      prometheus:
-        enabled: false
   endpoint:
     health:
       show-details: always
-    metrics:
-      enabled: true
-    prometheus:
-      enabled: true
   endpoints:
     web:
       exposure:
         include: health,info,prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: false
 
 info:
   damsel:
