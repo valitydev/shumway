@@ -1,9 +1,9 @@
 server:
-  port: '@server.port@'
+  port: ${server.port}
 
 management:
   server:
-    port: '@management.port@'
+    port: ${management.port}
   endpoint:
     health:
       show-details: always
@@ -18,13 +18,13 @@ management:
 
 info:
   damsel:
-    version: '@damsel.version@'
+    version: ${damsel.version}
   stage: dev
-  version: '@project.version@'
+  version: ${project.version}
 
 spring:
   application:
-    name: '@project.name@'
+    name: ${project.name}
   datasource:
     hikari:
       idle-timeout: 30000
@@ -34,9 +34,9 @@ spring:
       maximum-pool-size: 50
       max-lifetime: 300000
       minimum-idle: 2
-    password: '@db.password@'
-    url: '@db.url@'
-    username: '@db.user@'
+    password: ${db.password}
+    url: ${db.url}
+    username: ${db.user}
 
 db:
   jdbc:
