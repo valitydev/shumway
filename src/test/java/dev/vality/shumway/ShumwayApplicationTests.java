@@ -21,10 +21,9 @@ import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
 import javax.annotation.PostConstruct;
-
 import java.net.URI;
 import java.time.Instant;
 import java.util.Arrays;
@@ -42,7 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class ShumwayApplicationTests extends AbstractIntegrationTest {
+@PostgresqlSpringBootITest
+public class ShumwayApplicationTests {
 
     @LocalServerPort
     protected int port;
@@ -766,7 +766,7 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
         };
 
         Stream.of(commitLog.getAffectedAccounts().get(fromAccountId1),
-                commitLog.getAffectedAccounts().get(toAccountId1))
+                        commitLog.getAffectedAccounts().get(toAccountId1))
                 .forEach(check);
 
         planId = "" + (planIdNum + 1);
@@ -775,13 +775,13 @@ public class ShumwayApplicationTests extends AbstractIntegrationTest {
         PostingPlanLog combinedPlanLog = client.hold(new PostingPlanChange(planId, combinedBatch));
 
         Stream.of(combinedPlanLog.getAffectedAccounts().get(fromAccountId1),
-                combinedPlanLog.getAffectedAccounts().get(toAccountId1))
+                        combinedPlanLog.getAffectedAccounts().get(toAccountId1))
                 .forEach(check);
 
         PostingPlanLog commitCombinedPlanLog = client.commitPlan(new PostingPlan(planId, asList(combinedBatch)));
 
         Stream.of(commitCombinedPlanLog.getAffectedAccounts().get(fromAccountId1),
-                commitCombinedPlanLog.getAffectedAccounts().get(toAccountId1))
+                        commitCombinedPlanLog.getAffectedAccounts().get(toAccountId1))
                 .forEach(check);
     }
 

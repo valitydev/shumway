@@ -1,11 +1,12 @@
 package dev.vality.shumway.integration;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import dev.vality.damsel.accounter.Posting;
 import dev.vality.damsel.accounter.PostingBatch;
 import dev.vality.damsel.accounter.PostingPlan;
 import dev.vality.damsel.accounter.PostingPlanChange;
-import dev.vality.shumway.AbstractIntegrationTest;
-import dev.vality.shumway.ShumwayApplication;
+import dev.vality.shumway.PostgresqlSpringBootITest;
 import dev.vality.shumway.domain.PostingOperation;
 import dev.vality.shumway.handler.AccounterHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +15,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.testcontainers.shaded.com.google.common.collect.Iterables;
-import org.testcontainers.shaded.com.google.common.collect.Lists;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -32,8 +30,8 @@ import java.util.stream.Stream;
 import static java.sql.Types.OTHER;
 
 @Slf4j
-@SpringBootTest(classes = ShumwayApplication.class)
-public class RealTest extends AbstractIntegrationTest {
+@PostgresqlSpringBootITest
+public class RealTest {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
