@@ -2,7 +2,7 @@ package dev.vality.shumway.performance;
 
 import lombok.Builder;
 import org.springframework.core.io.ClassPathResource;
-import org.testcontainers.shaded.org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;

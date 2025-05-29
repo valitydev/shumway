@@ -41,7 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class ShumwayApplicationTests extends AbstractIntegrationTest {
+@PostgresqlSpringBootITest
+public class ShumwayApplicationTests {
 
     @LocalServerPort
     protected int port;
