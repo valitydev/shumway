@@ -16,12 +16,6 @@ management:
       export:
         enabled: false
 
-info:
-  damsel:
-    version: ${damsel.version}
-  stage: dev
-  version: ${project.version}
-
 spring:
   application:
     name: ${project.name}
