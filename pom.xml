@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>shumway</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>shumway</name>
@@ -102,7 +102,7 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>damsel</artifactId>
-            <version>1.652-ecf4977</version>
+            <version>1.656-ba74148</version>
         </dependency>
         <dependency>
             <groupId>dev.vality.geck</groupId>
