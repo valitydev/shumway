@@ -102,7 +102,6 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>damsel</artifactId>
-            <version>1.652-ecf4977</version>
         </dependency>
         <dependency>
             <groupId>dev.vality.geck</groupId>
