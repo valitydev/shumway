@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>shumway</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>shumway</name>
@@ -124,7 +124,7 @@
         <dependency>
             <groupId>com.palantir.docker.compose</groupId>
             <artifactId>docker-compose-rule-junit4</artifactId>
-            <version>1.0.0</version>
+            <version>1.9.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.hamcrest</groupId>
@@ -137,7 +137,7 @@
         <dependency>
             <groupId>dev.vality</groupId>
             <artifactId>testcontainers-annotations</artifactId>
-            <version>3.0.1</version>
+            <version>3.2.0001</version>
             <scope>test</scope>
         </dependency>
 
